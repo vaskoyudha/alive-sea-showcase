@@ -1,6 +1,8 @@
+import { type PointerEvent, useRef, useState } from 'react'
 import './App.css'
 
 const driveUrl = 'https://drive.google.com/drive/folders/1vshOZCRxXkgY5Yj5CDcST13iDoHaBT_-'
+const panoramaDriveUrl = 'https://drive.google.com/drive/folders/1Lmq-Mm2LeH1wKD7c_UPMNCVp0P4N8Fo_'
 const asset = (fileName: string) => `/alive/${fileName}`
 
 const evidenceMetrics = [
@@ -62,6 +64,157 @@ const galleryImages = [
   },
 ]
 
+const panoramaScenes = [
+  {
+    src: '360/scene-01.webp',
+    thumb: '360/thumb-01.webp',
+    label: 'Scene 01',
+    detail: 'Waterfront prototype panorama',
+    alt: 'Interactive 360 degree view of the ALIVE prototype from the waterfront panorama folder',
+  },
+  {
+    src: '360/scene-02.webp',
+    thumb: '360/thumb-02.webp',
+    label: 'Scene 02',
+    detail: 'Starboard angle and dock context',
+    alt: 'Interactive 360 degree view of ALIVE from a starboard-side panorama angle',
+  },
+  {
+    src: '360/scene-03.webp',
+    thumb: '360/thumb-03.webp',
+    label: 'Scene 03',
+    detail: 'Prototype scale beside water',
+    alt: 'Interactive 360 degree view showing the ALIVE prototype scale near water',
+  },
+  {
+    src: '360/scene-04.webp',
+    thumb: '360/thumb-04.webp',
+    label: 'Scene 04',
+    detail: 'Deck and rescue-orange profile',
+    alt: 'Interactive 360 degree view highlighting the orange ALIVE prototype deck profile',
+  },
+  {
+    src: '360/scene-05.webp',
+    thumb: '360/thumb-05.webp',
+    label: 'Scene 05',
+    detail: 'Open-air field evidence',
+    alt: 'Interactive 360 degree view of the ALIVE field evidence panorama',
+  },
+  {
+    src: '360/scene-06.webp',
+    thumb: '360/thumb-06.webp',
+    label: 'Scene 06',
+    detail: 'Final full-environment sweep',
+    alt: 'Interactive 360 degree view of the ALIVE prototype environment sweep',
+  },
+]
+
+const wrapPercent = (value: number) => ((value % 100) + 100) % 100
+
+function View360() {
+  const [sceneIndex, setSceneIndex] = useState(0)
+  const [rotation, setRotation] = useState(58)
+  const dragRef = useRef<{ startX: number; startRotation: number } | null>(null)
+  const activeScene = panoramaScenes[sceneIndex]
+
+  const rotateBy = (amount: number) => {
+    setRotation((current) => wrapPercent(current + amount))
+  }
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    dragRef.current = { startX: event.clientX, startRotation: rotation }
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!dragRef.current) return
+    const delta = event.clientX - dragRef.current.startX
+    setRotation(wrapPercent(dragRef.current.startRotation - delta * 0.08))
+  }
+
+  const stopDragging = () => {
+    dragRef.current = null
+  }
+
+  return (
+    <section className="section view360-section" id="view360" aria-labelledby="view360-title">
+      <div className="view360-copy">
+        <p className="eyebrow">Immersive evidence · Drive panorama folder</p>
+        <h2 id="view360-title">360° Product View</h2>
+        <p>
+          The dedicated 360° Drive folder is now part of the website as an interactive sea-side
+          inspection module. Drag the scene, use the rotation controls, or switch between the six
+          captured panorama frames to inspect ALIVE like a premium product reveal.
+        </p>
+        <div className="view360-stats" aria-label="360 panorama details">
+          <span>6 equirectangular frames</span>
+          <span>4096px web-optimized</span>
+          <span>Drag-to-rotate</span>
+        </div>
+        <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
+          Open 360° source folder
+        </a>
+      </div>
+
+      <div className="viewer-shell">
+        <div className="viewer-topline">
+          <span>ALIVE / 360 SCAN</span>
+          <strong>{activeScene.label}</strong>
+        </div>
+        <div
+          className="panorama-window"
+          role="img"
+          aria-label={activeScene.alt}
+          style={{ backgroundImage: `url(${asset(activeScene.src)})`, backgroundPosition: `${rotation}% 50%` }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={stopDragging}
+          onPointerCancel={stopDragging}
+          onPointerLeave={stopDragging}
+        >
+          <div className="viewer-glass" aria-hidden="true" />
+          <div className="viewer-reticle" aria-hidden="true" />
+          <div className="drag-hint">Drag to rotate the environment</div>
+          <div className="scene-caption">
+            <span>{activeScene.detail}</span>
+            <small>{Math.round(rotation * 3.6)}° heading</small>
+          </div>
+        </div>
+
+        <div className="viewer-controls" aria-label="360 viewer controls">
+          <button type="button" onClick={() => rotateBy(-9)} aria-label="Rotate 360 view left">
+            ←
+          </button>
+          <div className="rotation-meter" aria-hidden="true">
+            <span style={{ transform: `translateX(${rotation}%)` }} />
+          </div>
+          <button type="button" onClick={() => rotateBy(9)} aria-label="Rotate 360 view right">
+            →
+          </button>
+        </div>
+
+        <div className="scene-strip" aria-label="360 source frames">
+          {panoramaScenes.map((scene, index) => (
+            <button
+              type="button"
+              key={scene.src}
+              className={index === sceneIndex ? 'active' : undefined}
+              onClick={() => {
+                setSceneIndex(index)
+                setRotation(58)
+              }}
+              aria-pressed={index === sceneIndex}
+            >
+              <img src={asset(scene.thumb)} alt="" />
+              <span>{scene.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function App() {
   return (
     <main className="site-shell">
@@ -71,6 +224,7 @@ function App() {
         </a>
         <div className="nav-links">
           <a href="#system">System</a>
+          <a href="#view360">View 360</a>
           <a href="#testing">Testing</a>
           <a href="#vision">Vision AI</a>
           <a href="#impact">Impact</a>
@@ -89,11 +243,11 @@ function App() {
             flood response faster, safer, and more coordinated from the first minutes of an emergency.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#testing">
-              See validation
+            <a className="button button-primary" href="#view360">
+              Explore 360°
             </a>
-            <a className="button button-ghost" href="#system">
-              How it works
+            <a className="button button-ghost" href="#testing">
+              See validation
             </a>
           </div>
           <div className="mission-tagline" aria-label="Project tagline">
@@ -165,6 +319,8 @@ function App() {
           </figure>
         </div>
       </section>
+
+      <View360 />
 
       <section className="section testing-section" id="testing">
         <div className="section-heading center-heading">

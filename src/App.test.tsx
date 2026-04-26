@@ -35,4 +35,14 @@ describe('ALIVE project showcase', () => {
     expect(within(metrics).getByText('60.8%')).toBeInTheDocument()
     expect(within(metrics).getByText(/mAP50-95/i)).toBeInTheDocument()
   })
+
+  it('adds an interactive 360 degree product view from the Drive panorama folder', () => {
+    render(<App />)
+
+    expect(screen.getByRole('link', { name: /View 360/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /360° Product View/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /interactive 360 degree view/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /rotate 360 view left/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /rotate 360 view right/i })).toBeInTheDocument()
+  })
 })

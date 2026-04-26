@@ -1,22 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --void: #00060a;
-  --deep: #02111c;
-  --abyss: #031b2a;
-  --panel: rgba(4, 26, 41, 0.72);
-  --panel-strong: rgba(6, 38, 59, 0.9);
-  --line: rgba(135, 218, 255, 0.18);
-  --line-strong: rgba(94, 216, 255, 0.42);
-  --text: #effaff;
-  --muted: #95b8c7;
-  --cyan: #21d7ff;
-  --cyan-soft: rgba(33, 215, 255, 0.18);
-  --sea: #00a5c8;
-  --orange: #ff6a24;
-  --orange-soft: rgba(255, 106, 36, 0.18);
+  --void: #020713;
+  --deep: #03162a;
+  --abyss: #062746;
+  --panel: rgba(5, 33, 58, 0.74);
+  --panel-strong: rgba(7, 47, 79, 0.92);
+  --line: rgba(139, 218, 255, 0.2);
+  --line-strong: rgba(118, 219, 255, 0.5);
+  --text: #f2fbff;
+  --muted: #a7c7d8;
+  --cyan: #5ee7ff;
+  --cyan-soft: rgba(94, 231, 255, 0.18);
+  --sea: #0077be;
+  --sea-royal: #0a4f9e;
+  --lagoon: #16d4e8;
+  --gold: #f7d795;
+  --orange: #f6a45f;
+  --orange-soft: rgba(246, 164, 95, 0.15);
   --sand: #f2d6a2;
-  --shadow: 0 30px 120px rgba(0, 0, 0, 0.48);
+  --shadow: 0 34px 130px rgba(0, 20, 43, 0.62);
   --radius-lg: 34px;
   --radius-md: 22px;
   --radius-sm: 14px;
@@ -43,9 +46,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 20% -10%, rgba(0, 165, 200, 0.34), transparent 36rem),
-    radial-gradient(circle at 90% 12%, rgba(255, 106, 36, 0.15), transparent 28rem),
-    linear-gradient(180deg, #00060a 0%, #031827 44%, #01060a 100%);
+    radial-gradient(circle at 18% -12%, rgba(53, 152, 255, 0.34), transparent 34rem),
+    radial-gradient(circle at 82% 5%, rgba(22, 212, 232, 0.2), transparent 30rem),
+    radial-gradient(circle at 52% 78%, rgba(247, 215, 149, 0.08), transparent 28rem),
+    linear-gradient(180deg, #020713 0%, #041b31 42%, #020914 100%);
 }
 
 body::before {
