@@ -2,32 +2,48 @@ import { act } from 'react'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
+import cssText from './App.css?raw'
 import './setupTests'
 
 describe('ALIVE project showcase', () => {
   afterEach(() => {
     vi.restoreAllMocks()
   })
-  it('presents the ALIVE flood-rescue mission in the hero', () => {
+
+  it('menyajikan misi ALIVE dalam Bahasa Indonesia di hero', () => {
     render(<App />)
 
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /ALIVE: Advanced Lifeboat for Flood Evacuation/i,
+        name: /ALIVE: Sekoci Pintar untuk Evakuasi Banjir/i,
       }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/Faster Evacuation, More Lives Safely/i)).toBeInTheDocument()
-    expect(screen.getByText(/object-detection lifeboat prototype/i)).toBeInTheDocument()
+    expect(screen.getByText(/Evakuasi Lebih Cepat, Lebih Banyak Nyawa Selamat/i)).toBeInTheDocument()
+    expect(screen.getByText(/prototipe sekoci pintar berbasis deteksi objek/i)).toBeInTheDocument()
   })
 
-  it('shows engineering, testing, and SDG proof sections', () => {
+  it('menampilkan navbar Bahasa Indonesia yang mengikuti scroll', () => {
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: /How ALIVE Works/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Validated in the Water/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Object Detection Results/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Aligned with SDG 3 and SDG 11/i })).toBeInTheDocument()
+    const nav = screen.getByRole('navigation', { name: /Navigasi utama/i })
+    expect(within(nav).getByRole('link', { name: /Sistem/i })).toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: /Panorama 360/i })).toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: /Pengujian/i })).toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: /Dampak/i })).toBeInTheDocument()
+
+    expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*position:\s*fixed/)
+    expect(cssText).toMatch(/backdrop-filter:\s*blur\(28px\)\s*saturate\(1\.8\)/)
+    expect(cssText).toMatch(/scroll-margin-top:\s*156px/)
+  })
+
+  it('menampilkan bagian sistem, pengujian, visi AI, dan dampak dalam Bahasa Indonesia', () => {
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: /Cara Kerja ALIVE/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Tervalidasi di Air/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Hasil Deteksi Objek/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Selaras dengan SDG 3 dan SDG 11/i })).toBeInTheDocument()
   })
 
   it('renders the project evidence metrics from the Drive assets', () => {
@@ -35,32 +51,32 @@ describe('ALIVE project showcase', () => {
 
     const metrics = screen.getByTestId('evidence-metrics')
     expect(within(metrics).getByText('97.6%')).toBeInTheDocument()
-    expect(within(metrics).getByText(/best mAP50/i)).toBeInTheDocument()
+    expect(within(metrics).getByText(/mAP50 terbaik/i)).toBeInTheDocument()
     expect(within(metrics).getByText('60.8%')).toBeInTheDocument()
     expect(within(metrics).getByText(/mAP50-95/i)).toBeInTheDocument()
   })
 
-  it('adds an interactive 360 degree product view from the Drive panorama folder', () => {
+  it('adds an interactive 360 degree panorama view from the Drive panorama folder', () => {
     render(<App />)
 
-    expect(screen.getByRole('link', { name: /View 360/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /360° Product View/i })).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: /interactive 360 degree view/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /rotate 360 view left/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /rotate 360 view right/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Panorama 360/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Panorama 360° ALIVE/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /tampilan panorama 360 derajat/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /putar panorama 360 ke kiri/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /putar panorama 360 ke kanan/i })).toBeInTheDocument()
   })
 
   it('lets visitors drag the 360 viewer without requiring pointer-capture support', () => {
     render(<App />)
 
-    const viewer = screen.getByRole('img', { name: /interactive 360 degree view/i })
-    expect(screen.getByText(/209° heading/i)).toBeInTheDocument()
+    const viewer = screen.getByRole('img', { name: /tampilan panorama 360 derajat/i })
+    expect(screen.getByText(/209° arah/i)).toBeInTheDocument()
 
     fireEvent.pointerDown(viewer, { clientX: 220, pointerId: 1 })
     fireEvent.pointerMove(viewer, { clientX: 120, pointerId: 1 })
     fireEvent.pointerUp(viewer, { pointerId: 1 })
 
-    expect(screen.getByText(/238° heading/i)).toBeInTheDocument()
+    expect(screen.getByText(/238° arah/i)).toBeInTheDocument()
   })
 
   it('exposes a fullscreen control for the 360 viewer', async () => {
@@ -77,7 +93,7 @@ describe('ALIVE project showcase', () => {
     render(<App />)
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /enter fullscreen 360 viewer/i }))
+      fireEvent.click(screen.getByRole('button', { name: /masuk mode layar penuh viewer 360/i }))
     })
 
     expect(requestFullscreen).toHaveBeenCalledTimes(1)

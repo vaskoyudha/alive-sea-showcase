@@ -1,25 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --void: #020713;
-  --deep: #03162a;
-  --abyss: #062746;
-  --panel: rgba(5, 33, 58, 0.74);
-  --panel-strong: rgba(7, 47, 79, 0.92);
-  --line: rgba(139, 218, 255, 0.2);
-  --line-strong: rgba(118, 219, 255, 0.5);
-  --text: #f2fbff;
-  --muted: #a7c7d8;
-  --cyan: #5ee7ff;
-  --cyan-soft: rgba(94, 231, 255, 0.18);
-  --sea: #0077be;
-  --sea-royal: #0a4f9e;
-  --lagoon: #16d4e8;
-  --gold: #f7d795;
+  --void: #02102b;
+  --deep: #043b78;
+  --abyss: #075fa8;
+  --panel: rgba(9, 104, 190, 0.44);
+  --panel-strong: rgba(8, 89, 175, 0.72);
+  --line: rgba(150, 232, 255, 0.34);
+  --line-strong: rgba(129, 230, 255, 0.7);
+  --text: #f4fcff;
+  --muted: #b9e3f4;
+  --cyan: #63ecff;
+  --cyan-soft: rgba(99, 236, 255, 0.22);
+  --sea: #008cff;
+  --sea-royal: #0b58ff;
+  --lagoon: #00d9ff;
+  --gold: #f8d88d;
   --orange: #f6a45f;
   --orange-soft: rgba(246, 164, 95, 0.15);
   --sand: #f2d6a2;
-  --shadow: 0 34px 130px rgba(0, 20, 43, 0.62);
+  --shadow: 0 34px 150px rgba(0, 77, 185, 0.46);
   --radius-lg: 34px;
   --radius-md: 22px;
   --radius-sm: 14px;
@@ -46,10 +46,11 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 18% -12%, rgba(53, 152, 255, 0.34), transparent 34rem),
-    radial-gradient(circle at 82% 5%, rgba(22, 212, 232, 0.2), transparent 30rem),
-    radial-gradient(circle at 52% 78%, rgba(247, 215, 149, 0.08), transparent 28rem),
-    linear-gradient(180deg, #020713 0%, #041b31 42%, #020914 100%);
+    radial-gradient(circle at 16% -14%, rgba(0, 140, 255, 0.58), transparent 36rem),
+    radial-gradient(circle at 86% 2%, rgba(99, 236, 255, 0.34), transparent 33rem),
+    radial-gradient(circle at 54% 70%, rgba(16, 110, 255, 0.22), transparent 31rem),
+    radial-gradient(circle at 52% 78%, rgba(248, 216, 141, 0.12), transparent 28rem),
+    linear-gradient(180deg, #03193f 0%, #063b79 38%, #02132c 100%);
 }
 
 body::before {
