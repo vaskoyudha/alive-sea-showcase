@@ -1,9 +1,13 @@
-import { render, screen, within } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { act } from 'react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 import './setupTests'
 
 describe('ALIVE project showcase', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
   it('presents the ALIVE flood-rescue mission in the hero', () => {
     render(<App />)
 
@@ -44,5 +48,38 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByRole('img', { name: /interactive 360 degree view/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /rotate 360 view left/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /rotate 360 view right/i })).toBeInTheDocument()
+  })
+
+  it('lets visitors drag the 360 viewer without requiring pointer-capture support', () => {
+    render(<App />)
+
+    const viewer = screen.getByRole('img', { name: /interactive 360 degree view/i })
+    expect(screen.getByText(/209° heading/i)).toBeInTheDocument()
+
+    fireEvent.pointerDown(viewer, { clientX: 220, pointerId: 1 })
+    fireEvent.pointerMove(viewer, { clientX: 120, pointerId: 1 })
+    fireEvent.pointerUp(viewer, { pointerId: 1 })
+
+    expect(screen.getByText(/238° heading/i)).toBeInTheDocument()
+  })
+
+  it('exposes a fullscreen control for the 360 viewer', async () => {
+    const requestFullscreen = vi.fn().mockResolvedValue(undefined)
+    Object.defineProperty(HTMLElement.prototype, 'requestFullscreen', {
+      configurable: true,
+      value: requestFullscreen,
+    })
+    Object.defineProperty(document, 'fullscreenEnabled', {
+      configurable: true,
+      value: true,
+    })
+
+    render(<App />)
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /enter fullscreen 360 viewer/i }))
+    })
+
+    expect(requestFullscreen).toHaveBeenCalledTimes(1)
   })
 })

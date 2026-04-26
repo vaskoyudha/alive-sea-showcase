@@ -1,4 +1,4 @@
-import { type PointerEvent, useRef, useState } from 'react'
+import { type PointerEvent, useEffect, useRef, useState } from 'react'
 import './App.css'
 
 const driveUrl = 'https://drive.google.com/drive/folders/1vshOZCRxXkgY5Yj5CDcST13iDoHaBT_-'
@@ -114,8 +114,60 @@ const wrapPercent = (value: number) => ((value % 100) + 100) % 100
 function View360() {
   const [sceneIndex, setSceneIndex] = useState(0)
   const [rotation, setRotation] = useState(58)
+  const [isDragging, setIsDragging] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const dragRef = useRef<{ startX: number; startRotation: number } | null>(null)
+  const viewerShellRef = useRef<HTMLDivElement | null>(null)
   const activeScene = panoramaScenes[sceneIndex]
+
+  useEffect(() => {
+    const stopWindowDrag = () => {
+      dragRef.current = null
+      setIsDragging(false)
+    }
+
+    window.addEventListener('pointerup', stopWindowDrag)
+    window.addEventListener('pointercancel', stopWindowDrag)
+
+    return () => {
+      window.removeEventListener('pointerup', stopWindowDrag)
+      window.removeEventListener('pointercancel', stopWindowDrag)
+    }
+  }, [])
+
+  useEffect(() => {
+    const syncNativeFullscreen = () => {
+      setIsFullscreen(document.fullscreenElement === viewerShellRef.current)
+    }
+
+    document.addEventListener('fullscreenchange', syncNativeFullscreen)
+
+    return () => {
+      document.removeEventListener('fullscreenchange', syncNativeFullscreen)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.body.classList.toggle('viewer-fullscreen-open', isFullscreen)
+
+    return () => {
+      document.body.classList.remove('viewer-fullscreen-open')
+    }
+  }, [isFullscreen])
+
+  useEffect(() => {
+    const exitFallbackFullscreen = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isFullscreen && !document.fullscreenElement) {
+        setIsFullscreen(false)
+      }
+    }
+
+    window.addEventListener('keydown', exitFallbackFullscreen)
+
+    return () => {
+      window.removeEventListener('keydown', exitFallbackFullscreen)
+    }
+  }, [isFullscreen])
 
   const rotateBy = (amount: number) => {
     setRotation((current) => wrapPercent(current + amount))
@@ -123,7 +175,11 @@ function View360() {
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     dragRef.current = { startX: event.clientX, startRotation: rotation }
-    event.currentTarget.setPointerCapture(event.pointerId)
+    setIsDragging(true)
+
+    if (typeof event.currentTarget.setPointerCapture === 'function') {
+      event.currentTarget.setPointerCapture(event.pointerId)
+    }
   }
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -132,8 +188,42 @@ function View360() {
     setRotation(wrapPercent(dragRef.current.startRotation - delta * 0.08))
   }
 
-  const stopDragging = () => {
+  const stopDragging = (event: PointerEvent<HTMLDivElement>) => {
     dragRef.current = null
+    setIsDragging(false)
+
+    if (
+      typeof event.currentTarget.hasPointerCapture === 'function' &&
+      event.currentTarget.hasPointerCapture(event.pointerId) &&
+      typeof event.currentTarget.releasePointerCapture === 'function'
+    ) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+  }
+
+  const toggleFullscreen = async () => {
+    const shell = viewerShellRef.current
+    if (!shell) return
+
+    if (isFullscreen) {
+      if (document.fullscreenElement && typeof document.exitFullscreen === 'function') {
+        await document.exitFullscreen()
+      }
+      setIsFullscreen(false)
+      return
+    }
+
+    if (document.fullscreenEnabled && typeof shell.requestFullscreen === 'function') {
+      setIsFullscreen(true)
+      try {
+        await shell.requestFullscreen()
+        return
+      } catch {
+        return
+      }
+    }
+
+    setIsFullscreen(true)
   }
 
   return (
@@ -156,13 +246,24 @@ function View360() {
         </a>
       </div>
 
-      <div className="viewer-shell">
+      <div className={`viewer-shell${isFullscreen ? ' viewer-shell-fullscreen' : ''}`} ref={viewerShellRef}>
         <div className="viewer-topline">
           <span>ALIVE / 360 SCAN</span>
-          <strong>{activeScene.label}</strong>
+          <div className="viewer-topline-actions">
+            <strong>{activeScene.label}</strong>
+            <button
+              type="button"
+              className="fullscreen-toggle"
+              onClick={() => void toggleFullscreen()}
+              aria-label={isFullscreen ? 'Exit fullscreen 360 viewer' : 'Enter fullscreen 360 viewer'}
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+            </button>
+          </div>
         </div>
         <div
-          className="panorama-window"
+          className={`panorama-window${isDragging ? ' is-dragging' : ''}`}
           role="img"
           aria-label={activeScene.alt}
           style={{ backgroundImage: `url(${asset(activeScene.src)})`, backgroundPosition: `${rotation}% 50%` }}
@@ -170,7 +271,6 @@ function View360() {
           onPointerMove={handlePointerMove}
           onPointerUp={stopDragging}
           onPointerCancel={stopDragging}
-          onPointerLeave={stopDragging}
         >
           <div className="viewer-glass" aria-hidden="true" />
           <div className="viewer-reticle" aria-hidden="true" />
