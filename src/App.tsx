@@ -10,59 +10,59 @@ const asset = (fileName: string) => `/alive/${fileName}`
 const evidenceMetrics = [
   {
     value: '97.6%',
-    label: 'mAP50 terbaik',
-    detail: 'Puncak deteksi objek YOLOv11n pada epoch 86',
+    label: 'best mAP50',
+    detail: 'YOLOv11n object detection peak at epoch 86',
   },
   {
     value: '60.8%',
     label: 'mAP50-95',
-    detail: 'Presisi terbaik pada ambang IoU yang lebih ketat',
+    detail: 'best measured precision across stricter IoU thresholds',
   },
   {
     value: '3',
-    label: 'varian model',
-    detail: 'Perbandingan YOLOv11n, YOLOv8n 640, dan YOLOv8n 240×120',
+    label: 'model variants',
+    detail: 'YOLOv11n, YOLOv8n 640, and YOLOv8n 240×120 compared',
   },
   {
     value: '5+',
-    label: 'set uji lapangan',
-    detail: 'Bukti prototipe, keselamatan, kecepatan, respons, dan visi AI',
+    label: 'field test sets',
+    detail: 'prototype, safety, speed, responsiveness, and vision evidence',
   },
 ]
 
 const systemFeatures = [
   {
-    kicker: 'Deteksi',
-    title: 'Respons awal berbasis visi komputer',
-    body: 'Alur kerja webcam dan Raspberry Pi mengenali manusia atau objek di skenario banjir agar tim penyelamat mendapat gambaran situasi lebih cepat.',
+    kicker: 'Detect',
+    title: 'Computer vision first response',
+    body: 'A webcam and Raspberry Pi pipeline identify people or objects in flood scenarios so the boat can support faster situational awareness.',
   },
   {
-    kicker: 'Navigasi',
-    title: 'Kendali permukaan dua pendorong',
-    body: 'Bodi katamaran berwarna oranye penyelamat menjaga platform tetap stabil, sementara dua pendorong menangani laju maju, belok, dan rute kembali.',
+    kicker: 'Navigate',
+    title: 'Twin-thruster surface control',
+    body: 'A high-visibility catamaran body keeps the rescue platform stable while the thrusters handle forward movement, turns, and return paths.',
   },
   {
-    kicker: 'Jangkau',
-    title: 'Akses lebih aman sebelum penyelamat tiba',
-    body: 'ALIVE dirancang sebagai wahana bantu tanpa awak yang dapat bergerak menuju korban di air sekaligus mengurangi paparan risiko bagi penyelamat.',
+    kicker: 'Deliver',
+    title: 'Safer reach before rescuers arrive',
+    body: 'ALIVE is designed as a compact unmanned support craft that can move toward people in water while reducing direct rescuer exposure.',
   },
 ]
 
 const galleryImages = [
   {
     src: 'dock-prototype.webp',
-    alt: 'Prototipe ALIVE di atas dermaga kayu dekat perairan',
-    caption: 'Prototipe dirakit dan dipotret dalam kondisi lapangan.',
+    alt: 'ALIVE prototype on a wooden dock beside water',
+    caption: 'Prototype assembled and photographed in field conditions.',
   },
   {
     src: 'water-drone.webp',
-    alt: 'Tampilan udara prototipe ALIVE berwarna oranye mengapung di air',
-    caption: 'Bukti uji penerapan di air dari perspektif drone.',
+    alt: 'Aerial view of the orange ALIVE prototype floating on water',
+    caption: 'Drone-perspective water deployment evidence.',
   },
   {
     src: 'sensor-closeup.webp',
-    alt: 'Close-up kamera dan perangkat sensor ALIVE',
-    caption: 'Modul kamera dan elektronik untuk deteksi objek.',
+    alt: 'Close-up of the ALIVE camera and sensor hardware',
+    caption: 'Camera and electronics module for object detection.',
   },
 ]
 
@@ -70,44 +70,44 @@ const panoramaScenes = [
   {
     src: '360/scene-01.webp',
     thumb: '360/thumb-01.webp',
-    label: 'Sudut 01',
-    detail: 'Panorama prototipe di area waterfront',
-    alt: 'Tampilan panorama 360 derajat prototipe ALIVE dari folder panorama waterfront',
+    label: 'Scene 01',
+    detail: 'Waterfront prototype panorama',
+    alt: 'Interactive 360 degree view of the ALIVE prototype from the waterfront panorama folder',
   },
   {
     src: '360/scene-02.webp',
     thumb: '360/thumb-02.webp',
-    label: 'Sudut 02',
-    detail: 'Konteks dermaga dan sisi starboard',
-    alt: 'Tampilan panorama 360 derajat ALIVE dari sudut sisi starboard',
+    label: 'Scene 02',
+    detail: 'Starboard angle and dock context',
+    alt: 'Interactive 360 degree view of ALIVE from a starboard-side panorama angle',
   },
   {
     src: '360/scene-03.webp',
     thumb: '360/thumb-03.webp',
-    label: 'Sudut 03',
-    detail: 'Skala prototipe di tepi air',
-    alt: 'Tampilan panorama 360 derajat yang menunjukkan skala prototipe ALIVE dekat air',
+    label: 'Scene 03',
+    detail: 'Prototype scale beside water',
+    alt: 'Interactive 360 degree view showing the ALIVE prototype scale near water',
   },
   {
     src: '360/scene-04.webp',
     thumb: '360/thumb-04.webp',
-    label: 'Sudut 04',
-    detail: 'Dek dan profil rescue-orange',
-    alt: 'Tampilan panorama 360 derajat yang menyorot profil dek oranye ALIVE',
+    label: 'Scene 04',
+    detail: 'Deck and rescue-orange profile',
+    alt: 'Interactive 360 degree view highlighting the orange ALIVE prototype deck profile',
   },
   {
     src: '360/scene-05.webp',
     thumb: '360/thumb-05.webp',
-    label: 'Sudut 05',
-    detail: 'Bukti lapangan terbuka',
-    alt: 'Tampilan panorama 360 derajat bukti lapangan ALIVE',
+    label: 'Scene 05',
+    detail: 'Open-air field evidence',
+    alt: 'Interactive 360 degree view of the ALIVE field evidence panorama',
   },
   {
     src: '360/scene-06.webp',
     thumb: '360/thumb-06.webp',
-    label: 'Sudut 06',
-    detail: 'Sapuan lingkungan penuh',
-    alt: 'Tampilan panorama 360 derajat sapuan lingkungan prototipe ALIVE',
+    label: 'Scene 06',
+    detail: 'Final full-environment sweep',
+    alt: 'Interactive 360 degree view of the ALIVE prototype environment sweep',
   },
 ]
 
@@ -269,20 +269,20 @@ function View360() {
   return (
     <section className="section view360-section" id="view360" aria-labelledby="view360-title">
       <div className="view360-copy">
-        <p className="eyebrow">Bukti imersif · Photo Sphere boat viewer</p>
-        <h2 id="view360-title">Panorama 360° ALIVE</h2>
+        <p className="eyebrow">Immersive evidence · Photo Sphere boat viewer</p>
+        <h2 id="view360-title">360° Product View</h2>
         <p>
-          Folder 360° dari Drive kini dirender sebagai viewer bola penuh seperti sesi museum 360 sebelumnya.
-          Seret langsung di area viewer untuk melihat sekeliling prototipe boat, gunakan kontrol kamera, atau pilih
-          sudut sumber untuk berpindah antar panorama lapangan ALIVE.
+          The dedicated 360° Drive folder now renders as a true photo-sphere viewer like the previous
+          working museum 360 experience. Drag directly inside the viewer to look around the ALIVE boat,
+          use the camera controls, or switch source scenes to inspect each field panorama.
         </p>
-        <div className="view360-stats" aria-label="Detail panorama 360">
-          <span>6 panorama equirectangular</span>
+        <div className="view360-stats" aria-label="360 panorama details">
+          <span>6 equirectangular panoramas</span>
           <span>Photo Sphere Viewer</span>
-          <span>Drag 360° asli</span>
+          <span>True drag-to-rotate 360°</span>
         </div>
         <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
-          Buka folder sumber 360°
+          Open 360° source folder
         </a>
       </div>
 
@@ -295,10 +295,10 @@ function View360() {
               type="button"
               className="fullscreen-toggle"
               onClick={() => void toggleFullscreen()}
-              aria-label={isFullscreen ? 'Keluar dari mode layar penuh viewer 360' : 'Masuk mode layar penuh viewer 360'}
+              aria-label={isFullscreen ? 'Exit fullscreen 360 viewer' : 'Enter fullscreen 360 viewer'}
               aria-pressed={isFullscreen}
             >
-              {isFullscreen ? 'Keluar layar penuh' : 'Layar penuh'}
+              {isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
             </button>
           </div>
         </div>
@@ -307,31 +307,31 @@ function View360() {
           data-testid="boat-photo-sphere-viewer"
           data-panorama-src={activePanoramaSrc}
           data-active-scene={activeScene.label}
-          aria-label="Viewer 360 boat ALIVE memakai Photo Sphere Viewer"
+          aria-label="ALIVE boat 360 viewer powered by Photo Sphere Viewer"
         >
           <div ref={photoSphereRef} className="photo-sphere-mount" />
           <div className="viewer-glass" aria-hidden="true" />
           <div className="viewer-reticle" aria-hidden="true" />
-          <div className="drag-hint">Drag langsung untuk melihat 360°</div>
+          <div className="drag-hint">Drag to explore the real 360° scene</div>
           <div className="scene-caption">
             <span>{activeScene.detail}</span>
-            <small>{Math.round(bearing)}° arah kamera</small>
+            <small>{Math.round(bearing)}° camera heading</small>
           </div>
         </div>
 
-        <div className="viewer-controls" aria-label="Kontrol kamera viewer 360">
-          <button type="button" onClick={() => rotateCameraBy(-28)} aria-label="Putar kamera 360 ke kiri">
+        <div className="viewer-controls" aria-label="360 viewer camera controls">
+          <button type="button" onClick={() => rotateCameraBy(-28)} aria-label="Rotate 360 camera left">
             ←
           </button>
           <div className="rotation-meter" aria-hidden="true">
             <span style={{ transform: `translateX(${(bearing / 360) * 100}%)` }} />
           </div>
-          <button type="button" onClick={() => rotateCameraBy(28)} aria-label="Putar kamera 360 ke kanan">
+          <button type="button" onClick={() => rotateCameraBy(28)} aria-label="Rotate 360 camera right">
             →
           </button>
         </div>
 
-        <div className="scene-strip" aria-label="Frame sumber 360">
+        <div className="scene-strip" aria-label="360 source frames">
           {panoramaScenes.map((scene, index) => (
             <button
               type="button"
@@ -353,58 +353,58 @@ function View360() {
 function App() {
   return (
     <main className="site-shell">
-      <nav className="topbar" aria-label="Navigasi utama">
-        <a className="brand" href="#hero" aria-label="Beranda ALIVE">
-          <img src={asset('logo.png')} alt="Logo ALIVE" />
+      <nav className="topbar" aria-label="Primary navigation">
+        <a className="brand" href="#hero" aria-label="ALIVE home">
+          <img src={asset('logo.png')} alt="ALIVE logo" />
         </a>
         <div className="nav-links">
-          <a href="#system">Sistem</a>
-          <a href="#view360">Panorama 360</a>
-          <a href="#testing">Pengujian</a>
-          <a href="#vision">Visi AI</a>
-          <a href="#impact">Dampak</a>
+          <a href="#system">System</a>
+          <a href="#view360">View 360</a>
+          <a href="#testing">Testing</a>
+          <a href="#vision">Vision AI</a>
+          <a href="#impact">Impact</a>
         </div>
         <a className="nav-cta" href={driveUrl} target="_blank" rel="noreferrer">
-          Sumber Drive
+          Source Drive
         </a>
       </nav>
 
       <section className="hero-section" id="hero">
         <div className="hero-copy">
-          <p className="eyebrow">Inovasi pelajar · evakuasi banjir · wahana permukaan pintar</p>
-          <h1>ALIVE: Sekoci Pintar untuk Evakuasi Banjir</h1>
+          <p className="eyebrow">Student innovation · flood evacuation · intelligent surface craft</p>
+          <h1>ALIVE: Advanced Lifeboat for Flood Evacuation</h1>
           <p className="hero-lede">
-            Sebuah presentasi profesional untuk prototipe sekoci pintar berbasis deteksi objek yang dirancang
-            agar respons banjir menjadi lebih cepat, aman, dan terkoordinasi sejak menit pertama keadaan darurat.
+            A professional showcase for an object-detection lifeboat prototype built to make
+            flood response faster, safer, and more coordinated from the first minutes of an emergency.
           </p>
           <div className="hero-actions">
             <a className="button button-primary" href="#view360">
-              Jelajahi 360°
+              Explore 360°
             </a>
             <a className="button button-ghost" href="#testing">
-              Lihat validasi
+              See validation
             </a>
           </div>
-          <div className="mission-tagline" aria-label="Tagline proyek">
-            Evakuasi Lebih Cepat, Lebih Banyak Nyawa Selamat
+          <div className="mission-tagline" aria-label="Project tagline">
+            Faster Evacuation, More Lives Safely
           </div>
         </div>
 
-        <div className="hero-visual" aria-label="Render produk ALIVE di atas antarmuka laut premium">
+        <div className="hero-visual" aria-label="ALIVE product render over a sea-inspired interface">
           <div className="sonar-card">
             <div className="sonar-grid" aria-hidden="true" />
             <img
               className="hero-product"
               src={asset('hero-render.webp')}
-              alt="Render sekoci pintar ALIVE berwarna oranye dengan dua ponton"
+              alt="Orange ALIVE smart lifeboat render with twin pontoons"
             />
             <div className="status-chip chip-top">Raspberry Pi + Webcam</div>
-            <div className="status-chip chip-bottom">Platform dua pendorong penyelamat</div>
+            <div className="status-chip chip-bottom">Twin-thruster rescue platform</div>
           </div>
         </div>
       </section>
 
-      <section className="evidence-strip" aria-label="Metrik bukti proyek" data-testid="evidence-metrics">
+      <section className="evidence-strip" aria-label="Project evidence metrics" data-testid="evidence-metrics">
         {evidenceMetrics.map((metric) => (
           <article className="metric-card" key={metric.label}>
             <strong>{metric.value}</strong>
@@ -416,11 +416,11 @@ function App() {
 
       <section className="section split-section" id="system">
         <div className="section-copy">
-          <p className="eyebrow">Arsitektur sistem</p>
-          <h2>Cara Kerja ALIVE</h2>
+          <p className="eyebrow">System architecture</p>
+          <h2>How ALIVE Works</h2>
           <p>
-            ALIVE menggabungkan desain mekanik apung, bodi oranye penyelamat yang mudah terlihat, elektronik tertanam,
-            kendali jarak jauh, dan deteksi objek ke dalam satu prototipe respons air yang ringkas.
+            ALIVE combines buoyant mechanical design, visible rescue-orange hardware, onboard electronics,
+            remote control, and object detection into one compact water-response prototype.
           </p>
         </div>
         <div className="feature-stack">
@@ -434,23 +434,23 @@ function App() {
         </div>
       </section>
 
-      <section className="design-board" aria-label="Tampilan desain ALIVE">
+      <section className="design-board" aria-label="ALIVE design views">
         <div className="board-header">
-          <p className="eyebrow">Bahasa desain industrial</p>
-          <h2>Bentuk siap laut, visibilitas kelas penyelamat.</h2>
+          <p className="eyebrow">Industrial design language</p>
+          <h2>Sea-ready shape, rescue-grade visibility.</h2>
         </div>
         <div className="render-grid">
           <figure className="render-card large-render">
-            <img src={asset('render-top.webp')} alt="Render tampak atas desain sekoci ALIVE" />
-            <figcaption>Layout dek atas untuk buoyancy, payload, dan penempatan sensor.</figcaption>
+            <img src={asset('render-top.webp')} alt="Top view render of ALIVE lifeboat design" />
+            <figcaption>Top deck layout for buoyancy, payload, and sensor placement.</figcaption>
           </figure>
           <figure className="render-card">
-            <img src={asset('render-front.webp')} alt="Render tampak depan sekoci ALIVE" />
-            <figcaption>Profil penyelamat dari depan dengan stabilitas ponton lebar.</figcaption>
+            <img src={asset('render-front.webp')} alt="Front view render of ALIVE lifeboat" />
+            <figcaption>Front-facing rescue profile with wide pontoon stability.</figcaption>
           </figure>
           <figure className="render-card">
-            <img src={asset('render-side.webp')} alt="Render tampak samping sekoci ALIVE" />
-            <figcaption>Profil samping rendah untuk pergerakan yang lebih halus di air.</figcaption>
+            <img src={asset('render-side.webp')} alt="Side view render of ALIVE lifeboat" />
+            <figcaption>Low-slung side profile for smooth water movement.</figcaption>
           </figure>
         </div>
       </section>
@@ -459,11 +459,11 @@ function App() {
 
       <section className="section testing-section" id="testing">
         <div className="section-heading center-heading">
-          <p className="eyebrow">Bukti prototipe</p>
-          <h2>Tervalidasi di Air</h2>
+          <p className="eyebrow">Prototype proof</p>
+          <h2>Validated in the Water</h2>
           <p>
-            Bukti di Drive mencakup render desain, perakitan prototipe, uji penerapan di air, simulasi penyelamatan,
-            pengecekan keamanan, uji kecepatan dan respons, serta hasil deteksi objek.
+            The Drive evidence includes design renders, prototype assembly, water deployment, rescue simulation,
+            safety checks, speed and responsiveness testing, and object-detection results.
           </p>
         </div>
         <div className="gallery-grid">
@@ -478,59 +478,59 @@ function App() {
 
       <section className="section vision-section" id="vision">
         <div className="vision-copy">
-          <p className="eyebrow">Bukti model deteksi</p>
-          <h2>Hasil Deteksi Objek</h2>
+          <p className="eyebrow">Detection model evidence</p>
+          <h2>Object Detection Results</h2>
           <p>
-            Artefak pelatihan proyek membandingkan beberapa varian YOLO. Titik model terbaik yang tercatat mencapai
-            97.6% mAP50, mendukung gagasan utama ALIVE: visi pintar dapat membantu wahana penyelamat kecil memahami
-            lingkungan banjir di sekitarnya.
+            Training artifacts from the project compare YOLO model variants. The strongest recorded checkpoint
+            reached 97.6% mAP50, supporting ALIVE’s core idea: smart vision can help a small rescue craft
+            understand the flood environment around it.
           </p>
-          <div className="model-list" aria-label="Model deteksi objek yang dibandingkan">
+          <div className="model-list" aria-label="Compared object detection models">
             <span>YOLOv11n</span>
             <span>YOLOv8n 640×640</span>
             <span>YOLOv8n 240×120</span>
           </div>
         </div>
         <div className="result-panels">
-          <img src={asset('yolov11-results.webp')} alt="Grafik hasil training YOLOv11n" />
-          <img src={asset('yolov8-results.webp')} alt="Grafik hasil training YOLOv8n" />
+          <img src={asset('yolov11-results.webp')} alt="YOLOv11n training results chart" />
+          <img src={asset('yolov8-results.webp')} alt="YOLOv8n training results chart" />
         </div>
       </section>
 
       <section className="section impact-section" id="impact">
         <div className="poster-card">
-          <img src={asset('poster.webp')} alt="Poster kompetisi ALIVE dengan metodologi dan temuan riset" />
+          <img src={asset('poster.webp')} alt="ALIVE competition poster with research methodology and findings" />
         </div>
         <div className="impact-copy">
-          <p className="eyebrow">Dampak manusia</p>
-          <h2>Selaras dengan SDG 3 dan SDG 11</h2>
+          <p className="eyebrow">Human impact</p>
+          <h2>Aligned with SDG 3 and SDG 11</h2>
           <p>
-            ALIVE mendukung kesehatan dan kesejahteraan melalui respons darurat yang lebih cepat, serta kota dan komunitas
-            berkelanjutan dengan menawarkan teknologi evakuasi banjir yang praktis untuk wilayah rawan bencana.
+            ALIVE supports Good Health and Well-Being by targeting faster emergency response, and Sustainable
+            Cities and Communities by proposing a practical flood-evacuation technology for disaster-prone areas.
           </p>
           <div className="impact-cards">
             <article>
               <span>SDG 3</span>
-              <strong>Kesehatan dan keselamatan</strong>
-              <p>Mengurangi risiko tenggelam dengan memperluas jangkauan bantuan saat banjir.</p>
+              <strong>Health and safety</strong>
+              <p>Reduce drowning risk by extending rescue reach during flood events.</p>
             </article>
             <article>
               <span>SDG 11</span>
-              <strong>Komunitas tangguh</strong>
-              <p>Meningkatkan kesiapan untuk keadaan darurat banjir di skala kota maupun komunitas.</p>
+              <strong>Resilient communities</strong>
+              <p>Improve readiness for urban and community-scale flood emergencies.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section className="team-section" aria-label="Tim ALIVE dan prototipe">
-        <img src={asset('team.webp')} alt="Tim pelajar ALIVE bersama prototipe di dekat perairan" />
+      <section className="team-section" aria-label="ALIVE team and prototype">
+        <img src={asset('team.webp')} alt="ALIVE student team with prototype beside the water" />
         <div>
-          <p className="eyebrow">Dibangun oleh inovator muda</p>
-          <h2>Dari riset kelas menuju prototipe yang diuji di air.</h2>
+          <p className="eyebrow">Built by young innovators</p>
+          <h2>From classroom research to water-tested prototype.</h2>
           <p>
-            Proyek ini dikembangkan oleh siswa SMP Al Falah Darussalam, Indonesia, dan disiapkan untuk
-            International Student Project Excellence Award 2026.
+            The project was developed by students from Al Falah Darussalam Junior High School, Indonesia,
+            and prepared for the International Student Project Excellence Award 2026.
           </p>
         </div>
       </section>
