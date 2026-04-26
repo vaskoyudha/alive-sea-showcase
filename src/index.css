@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --void: #00060a;
+  --deep: #02111c;
+  --abyss: #031b2a;
+  --panel: rgba(4, 26, 41, 0.72);
+  --panel-strong: rgba(6, 38, 59, 0.9);
+  --line: rgba(135, 218, 255, 0.18);
+  --line-strong: rgba(94, 216, 255, 0.42);
+  --text: #effaff;
+  --muted: #95b8c7;
+  --cyan: #21d7ff;
+  --cyan-soft: rgba(33, 215, 255, 0.18);
+  --sea: #00a5c8;
+  --orange: #ff6a24;
+  --orange-soft: rgba(255, 106, 36, 0.18);
+  --sand: #f2d6a2;
+  --shadow: 0 30px 120px rgba(0, 0, 0, 0.48);
+  --radius-lg: 34px;
+  --radius-md: 22px;
+  --radius-sm: 14px;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background: var(--void);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--void);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% -10%, rgba(0, 165, 200, 0.34), transparent 36rem),
+    radial-gradient(circle at 90% 12%, rgba(255, 106, 36, 0.15), transparent 28rem),
+    linear-gradient(180deg, #00060a 0%, #031827 44%, #01060a 100%);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.45;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: radial-gradient(circle at 50% 12%, black 0%, transparent 72%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: auto 0 0;
+  height: 28vh;
+  pointer-events: none;
+  opacity: 0.36;
+  background:
+    repeating-radial-gradient(ellipse at 50% 100%, rgba(33, 215, 255, 0.22) 0 1px, transparent 1px 21px),
+    linear-gradient(180deg, transparent, rgba(0, 165, 200, 0.12));
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.055em;
+}
+
+h1 {
+  max-width: 980px;
+  font-size: clamp(3.4rem, 8.8vw, 8.7rem);
+  line-height: 0.82;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(2.3rem, 5.5vw, 5.6rem);
+  line-height: 0.92;
+  font-weight: 760;
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  line-height: 1.02;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.7;
+}
