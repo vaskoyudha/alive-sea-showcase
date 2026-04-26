@@ -38,6 +38,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
   background: var(--void);
 }
 
@@ -45,6 +46,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 16% -14%, rgba(0, 140, 255, 0.58), transparent 36rem),
     radial-gradient(circle at 86% 2%, rgba(99, 236, 255, 0.34), transparent 33rem),

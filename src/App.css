@@ -1247,3 +1247,308 @@ body.viewer-fullscreen-open {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+@media (max-width: 520px) {
+  #hero,
+  #system,
+  #view360,
+  #testing,
+  #vision,
+  #impact {
+    scroll-margin-top: 32px;
+  }
+
+  html {
+    scroll-padding-bottom: calc(172px + env(safe-area-inset-bottom));
+  }
+
+  .site-shell {
+    padding: 28px 12px 0;
+    padding-bottom: 172px;
+    padding-bottom: calc(172px + env(safe-area-inset-bottom));
+  }
+
+  .site-shell::before {
+    display: none;
+  }
+
+  .topbar {
+    top: auto;
+    bottom: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    width: min(calc(100vw - 22px), 430px);
+    grid-template-columns: auto 1fr;
+    gap: 9px;
+    padding: 9px;
+    border-radius: 28px;
+    border-color: rgba(205, 247, 255, 0.48);
+    background:
+      linear-gradient(145deg, rgba(0, 117, 255, 0.74), rgba(0, 221, 255, 0.27)),
+      rgba(2, 19, 46, 0.84);
+    box-shadow:
+      0 18px 70px rgba(0, 18, 45, 0.58),
+      0 0 48px rgba(99, 236, 255, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+
+  .brand {
+    width: 82px;
+    min-width: 82px;
+  }
+
+  .nav-cta {
+    justify-self: end;
+    min-height: 36px;
+    padding-inline: 12px;
+    font-size: 0.78rem;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    font-size: clamp(0.52rem, 2.05vw, 0.66rem);
+    line-height: 1.1;
+  }
+
+  .nav-links a {
+    display: grid;
+    min-height: 34px;
+    place-items: center;
+    padding: 0 4px;
+    border: 1px solid rgba(209, 249, 255, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    opacity: 1;
+    text-align: center;
+  }
+
+  .hero-section {
+    gap: 24px;
+    min-height: auto;
+    padding: 28px 0 42px;
+  }
+
+  .hero-copy {
+    gap: 18px;
+  }
+
+  .hero-lede,
+  .section-copy p,
+  .vision-copy p,
+  .impact-copy p,
+  .section-heading p,
+  .team-section p,
+  .view360-copy p {
+    font-size: 0.98rem;
+    line-height: 1.62;
+  }
+
+  .hero-actions,
+  .button,
+  .mission-tagline,
+  .view360-source {
+    width: 100%;
+  }
+
+  .button {
+    min-height: 48px;
+  }
+
+  .mission-tagline {
+    padding: 10px 12px;
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .hero-visual,
+  .sonar-card {
+    min-height: clamp(300px, 86vw, 390px);
+  }
+
+  .sonar-card {
+    position: relative;
+    top: auto;
+    border-radius: 26px;
+  }
+
+  .hero-product {
+    width: 112%;
+    max-width: none;
+    transform: translateX(-4%) rotate(-2deg);
+  }
+
+  .status-chip {
+    max-width: calc(100% - 32px);
+    padding: 8px 10px;
+    font-size: 0.62rem;
+  }
+
+  .chip-top,
+  .chip-bottom {
+    left: 12px;
+  }
+
+  .chip-top {
+    top: 12px;
+  }
+
+  .chip-bottom {
+    bottom: 12px;
+  }
+
+  .section,
+  .design-board {
+    margin-bottom: 78px;
+  }
+
+  .evidence-strip {
+    gap: 10px;
+    margin-bottom: 72px;
+  }
+
+  .metric-card {
+    min-height: 132px;
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .metric-card strong {
+    font-size: clamp(2rem, 15vw, 3.6rem);
+  }
+
+  .feature-card,
+  .impact-cards article {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .design-board {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .render-card {
+    min-height: 190px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .gallery-card,
+  .poster-card,
+  .result-panels,
+  .team-section {
+    border-radius: 22px;
+  }
+
+  .team-section div {
+    padding: 10px;
+  }
+
+  .view360-section {
+    gap: 20px;
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .view360-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .viewer-shell {
+    gap: 10px;
+    padding: 8px;
+    border-radius: 20px;
+  }
+
+  .viewer-topline {
+    gap: 8px;
+    font-size: 0.62rem;
+  }
+
+  .fullscreen-toggle {
+    min-height: 36px;
+  }
+
+  .panorama-window {
+    min-height: clamp(240px, 68vw, 330px);
+    border-radius: 16px;
+  }
+
+  .viewer-glass {
+    inset: 10px;
+    border-radius: 14px;
+  }
+
+  .viewer-reticle {
+    width: 62px;
+    height: 62px;
+  }
+
+  .viewer-reticle::before {
+    left: -22px;
+    right: -22px;
+  }
+
+  .viewer-reticle::after {
+    top: -22px;
+    bottom: -22px;
+  }
+
+  .drag-hint {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 8px 10px;
+    font-size: 0.58rem;
+    text-align: center;
+  }
+
+  .scene-caption {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .viewer-controls {
+    grid-template-columns: 44px 1fr 44px;
+    gap: 8px;
+  }
+
+  .viewer-controls button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .scene-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    scroll-margin-bottom: calc(172px + env(safe-area-inset-bottom));
+  }
+
+  .scene-strip button {
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  .viewer-shell.viewer-shell-fullscreen,
+  .viewer-shell:fullscreen {
+    padding: 8px;
+  }
+
+  .viewer-shell.viewer-shell-fullscreen .panorama-window,
+  .viewer-shell:fullscreen .panorama-window {
+    height: clamp(260px, 58svh, 560px);
+    min-height: 240px;
+  }
+
+  .viewer-shell.viewer-shell-fullscreen .scene-strip,
+  .viewer-shell:fullscreen .scene-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

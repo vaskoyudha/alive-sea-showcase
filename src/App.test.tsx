@@ -46,6 +46,16 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByRole('heading', { name: /Selaras dengan SDG 3 dan SDG 11/i })).toBeInTheDocument()
   })
 
+  it('menyediakan layout mobile yang nyaman untuk navigasi dan viewer 360', () => {
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)/)
+    expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*bottom:\s*14px/)
+    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*display:\s*grid[\s\S]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/)
+    expect(cssText).toMatch(/\.site-shell\s*\{[\s\S]*padding-bottom:\s*172px/)
+    expect(cssText).toMatch(/scroll-padding-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
+    expect(cssText).toMatch(/\.panorama-window\s*\{[\s\S]*min-height:\s*clamp\(240px,\s*68vw,\s*330px\)/)
+    expect(cssText).toMatch(/\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)[\s\S]*scroll-margin-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
+  })
+
   it('renders the project evidence metrics from the Drive assets', () => {
     render(<App />)
 
