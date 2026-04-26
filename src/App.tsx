@@ -1,4 +1,6 @@
-import { type PointerEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Viewer } from '@photo-sphere-viewer/core'
+import '@photo-sphere-viewer/core/index.css'
 import './App.css'
 
 const driveUrl = 'https://drive.google.com/drive/folders/1vshOZCRxXkgY5Yj5CDcST13iDoHaBT_-'
@@ -109,46 +111,100 @@ const panoramaScenes = [
   },
 ]
 
-const wrapPercent = (value: number) => ((value % 100) + 100) % 100
+const initialBoatYaw = 209
+const initialBoatPitch = -14
+const initialBoatZoom = 55
+const initialBoatScene = panoramaScenes[0]
+const initialBoatPanoramaSrc = asset(initialBoatScene.src)
+const initialBoatCaption = `${initialBoatScene.label} · ${initialBoatScene.detail}`
+
+const wrapDegrees = (value: number) => ((value % 360) + 360) % 360
 
 function View360() {
   const [sceneIndex, setSceneIndex] = useState(0)
-  const [rotation, setRotation] = useState(58)
-  const [isDragging, setIsDragging] = useState(false)
+  const [bearing, setBearing] = useState(initialBoatYaw)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const dragRef = useRef<{ startX: number; startRotation: number } | null>(null)
   const viewerShellRef = useRef<HTMLDivElement | null>(null)
+  const photoSphereRef = useRef<HTMLDivElement | null>(null)
+  const viewerRef = useRef<Viewer | null>(null)
+  const bearingRef = useRef(initialBoatYaw)
   const activeScene = panoramaScenes[sceneIndex]
+  const activePanoramaSrc = asset(activeScene.src)
 
   useEffect(() => {
-    const stopWindowDrag = () => {
-      dragRef.current = null
-      setIsDragging(false)
+    bearingRef.current = bearing
+  }, [bearing])
+
+  useEffect(() => {
+    if (import.meta.env.MODE === 'test' || !photoSphereRef.current || viewerRef.current) {
+      return
     }
 
-    window.addEventListener('pointerup', stopWindowDrag)
-    window.addEventListener('pointercancel', stopWindowDrag)
+    const viewer = new Viewer({
+      container: photoSphereRef.current,
+      panorama: initialBoatPanoramaSrc,
+      caption: initialBoatCaption,
+      defaultYaw: `${initialBoatYaw}deg`,
+      defaultPitch: `${initialBoatPitch}deg`,
+      defaultZoomLvl: initialBoatZoom,
+      mousewheelCtrlKey: false,
+      touchmoveTwoFingers: false,
+      navbar: ['zoom', 'move', 'caption', 'fullscreen'],
+    })
+
+    viewerRef.current = viewer
 
     return () => {
-      window.removeEventListener('pointerup', stopWindowDrag)
-      window.removeEventListener('pointercancel', stopWindowDrag)
+      viewerRef.current = null
+      viewer.destroy()
     }
   }, [])
 
   useEffect(() => {
+    const viewer = viewerRef.current
+
+    if (!viewer) {
+      return
+    }
+
+    void viewer
+      .setPanorama(activePanoramaSrc, {
+        caption: `${activeScene.label} · ${activeScene.detail}`,
+        position: {
+          yaw: `${bearingRef.current}deg`,
+          pitch: `${initialBoatPitch}deg`,
+        },
+        zoom: initialBoatZoom,
+        transition: {
+          speed: 650,
+          effect: 'fade',
+          rotation: false,
+        },
+        showLoader: true,
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to switch ALIVE boat 360 panorama', error)
+      })
+  }, [activePanoramaSrc, activeScene.detail, activeScene.label])
+
+  useEffect(() => {
     const syncNativeFullscreen = () => {
       setIsFullscreen(document.fullscreenElement === viewerShellRef.current)
+      window.requestAnimationFrame(() => viewerRef.current?.autoSize())
     }
 
     document.addEventListener('fullscreenchange', syncNativeFullscreen)
+    window.addEventListener('resize', syncNativeFullscreen)
 
     return () => {
       document.removeEventListener('fullscreenchange', syncNativeFullscreen)
+      window.removeEventListener('resize', syncNativeFullscreen)
     }
   }, [])
 
   useEffect(() => {
     document.body.classList.toggle('viewer-fullscreen-open', isFullscreen)
+    window.requestAnimationFrame(() => viewerRef.current?.autoSize())
 
     return () => {
       document.body.classList.remove('viewer-fullscreen-open')
@@ -169,36 +225,19 @@ function View360() {
     }
   }, [isFullscreen])
 
-  const rotateBy = (amount: number) => {
-    setRotation((current) => wrapPercent(current + amount))
+  const rotateCameraBy = (amount: number) => {
+    setBearing((current) => {
+      const nextBearing = wrapDegrees(current + amount)
+      bearingRef.current = nextBearing
+      viewerRef.current?.rotate({ yaw: `${nextBearing}deg`, pitch: `${initialBoatPitch}deg` })
+      return nextBearing
+    })
   }
 
-  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    dragRef.current = { startX: event.clientX, startRotation: rotation }
-    setIsDragging(true)
-
-    if (typeof event.currentTarget.setPointerCapture === 'function') {
-      event.currentTarget.setPointerCapture(event.pointerId)
-    }
-  }
-
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return
-    const delta = event.clientX - dragRef.current.startX
-    setRotation(wrapPercent(dragRef.current.startRotation - delta * 0.08))
-  }
-
-  const stopDragging = (event: PointerEvent<HTMLDivElement>) => {
-    dragRef.current = null
-    setIsDragging(false)
-
-    if (
-      typeof event.currentTarget.hasPointerCapture === 'function' &&
-      event.currentTarget.hasPointerCapture(event.pointerId) &&
-      typeof event.currentTarget.releasePointerCapture === 'function'
-    ) {
-      event.currentTarget.releasePointerCapture(event.pointerId)
-    }
+  const selectScene = (index: number) => {
+    bearingRef.current = initialBoatYaw
+    setBearing(initialBoatYaw)
+    setSceneIndex(index)
   }
 
   const toggleFullscreen = async () => {
@@ -219,6 +258,7 @@ function View360() {
         await shell.requestFullscreen()
         return
       } catch {
+        setIsFullscreen(true)
         return
       }
     }
@@ -229,17 +269,17 @@ function View360() {
   return (
     <section className="section view360-section" id="view360" aria-labelledby="view360-title">
       <div className="view360-copy">
-        <p className="eyebrow">Bukti imersif · folder panorama Drive</p>
+        <p className="eyebrow">Bukti imersif · Photo Sphere boat viewer</p>
         <h2 id="view360-title">Panorama 360° ALIVE</h2>
         <p>
-          Folder 360° dari Drive kini tampil sebagai modul inspeksi panorama tepi laut. Geser area visual,
-          gunakan tombol putar, atau pilih enam sudut panorama untuk membaca konteks ALIVE dengan rasa
-          presentasi produk premium.
+          Folder 360° dari Drive kini dirender sebagai viewer bola penuh seperti sesi museum 360 sebelumnya.
+          Seret langsung di area viewer untuk melihat sekeliling prototipe boat, gunakan kontrol kamera, atau pilih
+          sudut sumber untuk berpindah antar panorama lapangan ALIVE.
         </p>
         <div className="view360-stats" aria-label="Detail panorama 360">
-          <span>6 frame equirectangular</span>
-          <span>4096px siap web</span>
-          <span>Geser untuk memutar</span>
+          <span>6 panorama equirectangular</span>
+          <span>Photo Sphere Viewer</span>
+          <span>Drag 360° asli</span>
         </div>
         <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
           Buka folder sumber 360°
@@ -248,7 +288,7 @@ function View360() {
 
       <div className={`viewer-shell${isFullscreen ? ' viewer-shell-fullscreen' : ''}`} ref={viewerShellRef}>
         <div className="viewer-topline">
-          <span>ALIVE / SCAN 360</span>
+          <span>ALIVE / BOAT 360</span>
           <div className="viewer-topline-actions">
             <strong>{activeScene.label}</strong>
             <button
@@ -263,32 +303,30 @@ function View360() {
           </div>
         </div>
         <div
-          className={`panorama-window${isDragging ? ' is-dragging' : ''}`}
-          role="img"
-          aria-label={activeScene.alt}
-          style={{ backgroundImage: `url(${asset(activeScene.src)})`, backgroundPosition: `${rotation}% 50%` }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={stopDragging}
-          onPointerCancel={stopDragging}
+          className="panorama-window photo-sphere-window"
+          data-testid="boat-photo-sphere-viewer"
+          data-panorama-src={activePanoramaSrc}
+          data-active-scene={activeScene.label}
+          aria-label="Viewer 360 boat ALIVE memakai Photo Sphere Viewer"
         >
+          <div ref={photoSphereRef} className="photo-sphere-mount" />
           <div className="viewer-glass" aria-hidden="true" />
           <div className="viewer-reticle" aria-hidden="true" />
-          <div className="drag-hint">Geser untuk memutar panorama</div>
+          <div className="drag-hint">Drag langsung untuk melihat 360°</div>
           <div className="scene-caption">
             <span>{activeScene.detail}</span>
-            <small>{Math.round(rotation * 3.6)}° arah</small>
+            <small>{Math.round(bearing)}° arah kamera</small>
           </div>
         </div>
 
-        <div className="viewer-controls" aria-label="Kontrol viewer 360">
-          <button type="button" onClick={() => rotateBy(-9)} aria-label="Putar panorama 360 ke kiri">
+        <div className="viewer-controls" aria-label="Kontrol kamera viewer 360">
+          <button type="button" onClick={() => rotateCameraBy(-28)} aria-label="Putar kamera 360 ke kiri">
             ←
           </button>
           <div className="rotation-meter" aria-hidden="true">
-            <span style={{ transform: `translateX(${rotation}%)` }} />
+            <span style={{ transform: `translateX(${(bearing / 360) * 100}%)` }} />
           </div>
-          <button type="button" onClick={() => rotateBy(9)} aria-label="Putar panorama 360 ke kanan">
+          <button type="button" onClick={() => rotateCameraBy(28)} aria-label="Putar kamera 360 ke kanan">
             →
           </button>
         </div>
@@ -299,10 +337,7 @@ function View360() {
               type="button"
               key={scene.src}
               className={index === sceneIndex ? 'active' : undefined}
-              onClick={() => {
-                setSceneIndex(index)
-                setRotation(58)
-              }}
+              onClick={() => selectScene(index)}
               aria-pressed={index === sceneIndex}
             >
               <img src={asset(scene.thumb)} alt="" />

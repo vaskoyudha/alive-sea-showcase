@@ -66,27 +66,33 @@ describe('ALIVE project showcase', () => {
     expect(within(metrics).getByText(/mAP50-95/i)).toBeInTheDocument()
   })
 
-  it('adds an interactive 360 degree panorama view from the Drive panorama folder', () => {
+  it('adds a real Photo Sphere 360 viewer from the Drive panorama folder', () => {
     render(<App />)
 
     expect(screen.getByRole('link', { name: /Panorama 360/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /Panorama 360° ALIVE/i })).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: /tampilan panorama 360 derajat/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /putar panorama 360 ke kiri/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /putar panorama 360 ke kanan/i })).toBeInTheDocument()
+    expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAttribute(
+      'data-panorama-src',
+      '/alive/360/scene-01.webp',
+    )
+    expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAccessibleName(/viewer 360 boat ALIVE/i)
+    expect(screen.getByRole('button', { name: /putar kamera 360 ke kiri/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /putar kamera 360 ke kanan/i })).toBeInTheDocument()
   })
 
-  it('lets visitors drag the 360 viewer without requiring pointer-capture support', () => {
+  it('lets visitors rotate the boat 360 camera and switch panorama scenes', () => {
     render(<App />)
 
-    const viewer = screen.getByRole('img', { name: /tampilan panorama 360 derajat/i })
-    expect(screen.getByText(/209° arah/i)).toBeInTheDocument()
+    const viewer = screen.getByTestId('boat-photo-sphere-viewer')
+    expect(viewer).toHaveAttribute('data-panorama-src', '/alive/360/scene-01.webp')
+    expect(screen.getByText(/209° arah kamera/i)).toBeInTheDocument()
 
-    fireEvent.pointerDown(viewer, { clientX: 220, pointerId: 1 })
-    fireEvent.pointerMove(viewer, { clientX: 120, pointerId: 1 })
-    fireEvent.pointerUp(viewer, { pointerId: 1 })
+    fireEvent.click(screen.getByRole('button', { name: /putar kamera 360 ke kanan/i }))
+    expect(screen.getByText(/237° arah kamera/i)).toBeInTheDocument()
 
-    expect(screen.getByText(/238° arah/i)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Sudut 03' }))
+    expect(viewer).toHaveAttribute('data-panorama-src', '/alive/360/scene-03.webp')
+    expect(screen.getByText(/209° arah kamera/i)).toBeInTheDocument()
   })
 
   it('exposes a fullscreen control for the 360 viewer', async () => {
