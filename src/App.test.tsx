@@ -31,6 +31,7 @@ describe('ALIVE project showcase', () => {
     expect(within(nav).getByRole('link', { name: /View 360/i })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: /Testing/i })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: /Impact/i })).toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: /Deep Dive/i })).toBeInTheDocument()
 
     expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*position:\s*fixed/)
     expect(cssText).toMatch(/backdrop-filter:\s*blur\(28px\)\s*saturate\(1\.8\)/)
@@ -49,7 +50,7 @@ describe('ALIVE project showcase', () => {
   it('keeps a comfortable mobile layout for navigation and the 360 viewer', () => {
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)/)
     expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*bottom:\s*14px/)
-    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*display:\s*grid[\s\S]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/)
+    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*display:\s*grid[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)/)
     expect(cssText).toMatch(/\.site-shell\s*\{[\s\S]*padding-bottom:\s*172px/)
     expect(cssText).toMatch(/scroll-padding-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
     expect(cssText).toMatch(/\.panorama-window\s*\{[\s\S]*min-height:\s*clamp\(240px,\s*68vw,\s*330px\)/)
@@ -64,6 +65,17 @@ describe('ALIVE project showcase', () => {
     expect(within(metrics).getByText(/best mAP50/i)).toBeInTheDocument()
     expect(within(metrics).getByText('60.8%')).toBeInTheDocument()
     expect(within(metrics).getByText(/mAP50-95/i)).toBeInTheDocument()
+  })
+
+  it('adds a deep dive page with analyzed project evidence', () => {
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: /Project Deep Dive/i })).toBeInTheDocument()
+    expect(screen.getByText(/November 2025 to March 2026/i)).toBeInTheDocument()
+    expect(screen.getByText(/0\.998 m\/s/i)).toBeInTheDocument()
+    expect(screen.getByText(/YOLOv8n 640x640/i)).toBeInTheDocument()
+    expect(screen.getAllByText('87%').length).toBeGreaterThan(0)
+    expect(screen.getByText(/wide-angle or thermal cameras/i)).toBeInTheDocument()
   })
 
   it('adds a real Photo Sphere 360 viewer from the Drive panorama folder', () => {

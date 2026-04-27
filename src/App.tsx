@@ -66,6 +66,103 @@ const galleryImages = [
   },
 ]
 
+const deepDiveAsset = (fileName: string) => asset(`deep-dive/${fileName}`)
+
+const projectFacts = [
+  { label: 'Research window', value: '5 months', detail: 'November 2025 to March 2026' },
+  { label: 'Design and build', value: 'Al Falah Darussalam', detail: 'Junior High School prototype development' },
+  { label: 'Testing site', value: 'InfinITS Tekno Sains Park', detail: 'Evaluation and field validation location' },
+]
+
+const anatomyItems = [
+  { title: 'Vision', detail: 'Webcam input feeds the object-detection pipeline for victim and obstacle awareness.' },
+  { title: 'Compute', detail: 'Raspberry Pi runs the lightweight detection/control stack on the rescue craft.' },
+  { title: 'Control', detail: 'Receiver and remote-control system support operator commands during prototype testing.' },
+  { title: 'Power', detail: 'LiPo battery pack supplies the electronics and propulsion system.' },
+  { title: 'Propulsion', detail: 'Twin thrusters provide forward movement, turning, and return-path control.' },
+  { title: 'Hull', detail: 'Catamaran-style flotation increases stability and keeps rescue-orange hardware visible.' },
+]
+
+const procedureStages = [
+  'Define flood-rescue risk, drowning exposure, and response-time constraints.',
+  'Design a compact floating platform around camera, compute, power, and thrusters.',
+  'Build the prototype and integrate remote control with object detection.',
+  'Run functional, object-detection, and basic-safety tests across repeated trials.',
+  'Analyze feasibility against a 75% target and identify next-version improvements.',
+]
+
+const deepDiveEvidence = [
+  {
+    src: 'poster.webp',
+    alt: 'Full ALIVE research poster summarizing methodology, results, and recommendations',
+    label: 'Research poster',
+    detail: 'The original poster contains the full project argument, results, SDG fit, and recommendations.',
+  },
+  {
+    src: 'render-ortho.webp',
+    alt: 'Orthographic render of the orange ALIVE lifeboat with catamaran pontoons',
+    label: 'Design model',
+    detail: 'The rendered model defines the rescue-orange body, camera mount, deck, and buoyant pontoon structure.',
+  },
+  {
+    src: 'field-testing.webp',
+    alt: 'ALIVE prototype on a dock beside water during field testing with students',
+    label: 'Field test setup',
+    detail: 'Students prepare the prototype at the waterfront before deployment and remote-control operation.',
+  },
+  {
+    src: 'assembly.webp',
+    alt: 'Students assembling ALIVE electronics and wiring on the prototype deck',
+    label: 'Electronics assembly',
+    detail: 'The prototype was assembled and checked manually, including wiring, battery, receiver, and deck modules.',
+  },
+  {
+    src: 'water-deployment.webp',
+    alt: 'ALIVE floating on green water during outdoor test deployment',
+    label: 'Water deployment',
+    detail: 'The craft was tested in real outdoor water conditions with an operator controlling movement from the dock.',
+  },
+  {
+    src: 'speed-timing.webp',
+    alt: 'Stopwatch screenshot showing speed testing time for the ALIVE prototype',
+    label: 'Speed timing',
+    detail: 'Stopwatch evidence supports the measured 20-meter travel time and speed result.',
+  },
+]
+
+const performanceResults = [
+  { value: '1.43s', label: 'Stop delay', detail: 'average response delay after stop command' },
+  { value: '2.88s', label: '90° turn', detail: 'average time for directional turn response' },
+  { value: '20.41s', label: 'Zig-zag', detail: 'average time across a 20m course' },
+  { value: '0.998 m/s', label: 'Average speed', detail: 'approximately 1 m/s across straight-path testing' },
+  { value: '20.06s', label: '20m average', detail: 'average time across the 20-meter straight path' },
+]
+
+const visionModels = [
+  { name: 'YOLOv11n 640x640', role: 'Peak mAP evidence', detail: 'Used as the strongest accuracy benchmark in the poster comparison.' },
+  { name: 'YOLOv8n 640x640', role: 'Selected balance', detail: 'Presented as the best accuracy/speed balance for Raspberry Pi 4 deployment.' },
+  { name: 'YOLOv8n 240x120', role: 'Speed variant', detail: 'Lower-resolution comparison for lightweight FPS testing.' },
+]
+
+const safetyResults = [
+  { label: 'Stability', value: '5/5', detail: 'successful test count' },
+  { label: 'Electrical durability', value: '3/5', detail: 'successful test count' },
+  { label: 'Return to base', value: '5/5', detail: 'successful test count' },
+]
+
+const feasibilityResults = [
+  { label: 'Functional', value: '100%' },
+  { label: 'Object detection', value: '100%' },
+  { label: 'Basic safety', value: '87%' },
+]
+
+const roadmapItems = [
+  'Use HDPE or carbon fiber instead of PVC/fiberglass for higher durability and speed.',
+  'Upgrade to wide-angle or thermal cameras for fog, low-light, and night detection.',
+  'Develop autonomous operation with a victim retrieval module such as a scoop or net.',
+  'Coordinate with disaster-management agencies for real-world rescue implementation.',
+]
+
 const panoramaScenes = [
   {
     src: '360/scene-01.webp',
@@ -340,7 +437,7 @@ function View360() {
               onClick={() => selectScene(index)}
               aria-pressed={index === sceneIndex}
             >
-              <img src={asset(scene.thumb)} alt="" />
+              <img src={asset(scene.thumb)} alt="" width={320} height={160} loading="lazy" />
               <span>{scene.label}</span>
             </button>
           ))}
@@ -350,12 +447,187 @@ function View360() {
   )
 }
 
+function ProjectDeepDive() {
+  return (
+    <section className="section deep-dive-section" id="deep-dive" aria-labelledby="deep-dive-title">
+      <div className="deep-dive-hero">
+        <div className="deep-dive-copy">
+          <p className="eyebrow">Project dossier · research evidence analysis</p>
+          <h2 id="deep-dive-title">Project Deep Dive</h2>
+          <p>
+            The source folder shows ALIVE as a complete student research project: a problem statement, engineering
+            design process, physical build, repeated water testing, object-detection validation, safety checks, and
+            future recommendations. This page turns that poster and image evidence into an interactive field dossier.
+          </p>
+        </div>
+        <div className="brief-grid" aria-label="Project research facts">
+          {projectFacts.map((fact) => (
+            <article key={fact.label}>
+              <span>{fact.label}</span>
+              <strong>{fact.value}</strong>
+              <p>{fact.detail}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="deep-dive-panel mission-brief">
+        <div>
+          <p className="eyebrow">Mission brief</p>
+          <h3>Why ALIVE exists</h3>
+          <p>
+            Indonesia faces frequent flood disasters, and drowning risk increases when rescue equipment is limited or
+            rescuers cannot reach victims quickly. ALIVE targets that gap with a compact smart lifeboat that can be
+            remotely controlled, detect people or objects, and support earlier flood-evacuation response.
+          </p>
+        </div>
+        <figure>
+          <img
+            src={deepDiveAsset('render-ortho.webp')}
+            alt="Orthographic render of the orange ALIVE lifeboat prototype"
+            width={1600}
+            height={871}
+            loading="lazy"
+          />
+          <figcaption>Rendered prototype: orange catamaran body, front vision module, deck payload, and twin flotation arms.</figcaption>
+        </figure>
+      </div>
+
+      <div className="deep-dive-grid">
+        <section className="deep-dive-panel" aria-labelledby="anatomy-title">
+          <p className="eyebrow">System anatomy</p>
+          <h3 id="anatomy-title">Hardware and control stack</h3>
+          <div className="anatomy-grid">
+            {anatomyItems.map((item) => (
+              <article key={item.title}>
+                <strong>{item.title}</strong>
+                <p>{item.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="deep-dive-panel" aria-labelledby="procedure-title">
+          <p className="eyebrow">Research procedure</p>
+          <h3 id="procedure-title">From problem to tested prototype</h3>
+          <ol className="procedure-list">
+            {procedureStages.map((stage) => (
+              <li key={stage}>{stage}</li>
+            ))}
+          </ol>
+        </section>
+      </div>
+
+      <section className="deep-dive-panel evidence-wall" aria-labelledby="evidence-wall-title">
+        <div className="section-heading center-heading">
+          <p className="eyebrow">Image evidence analysis</p>
+          <h3 id="evidence-wall-title">What the folder proves visually</h3>
+          <p>
+            The images show a full chain of evidence: poster research framing, CAD-style design, student assembly,
+            dockside preparation, water deployment, and stopwatch timing for functional performance.
+          </p>
+        </div>
+        <div className="evidence-wall-grid">
+          {deepDiveEvidence.map((item) => (
+            <figure key={item.src}>
+              <img src={deepDiveAsset(item.src)} alt={item.alt} loading="lazy" />
+              <figcaption>
+                <strong>{item.label}</strong>
+                {item.detail}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <div className="deep-dive-grid results-grid">
+        <section className="deep-dive-panel" aria-labelledby="performance-title">
+          <p className="eyebrow">Functional results</p>
+          <h3 id="performance-title">Movement and response testing</h3>
+          <div className="performance-grid">
+            {performanceResults.map((result) => (
+              <article key={result.label}>
+                <strong>{result.value}</strong>
+                <span>{result.label}</span>
+                <p>{result.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="deep-dive-panel" aria-labelledby="vision-analysis-title">
+          <p className="eyebrow">Vision AI analysis</p>
+          <h3 id="vision-analysis-title">YOLO model comparison</h3>
+          <div className="vision-models">
+            {visionModels.map((model) => (
+              <article key={model.name}>
+                <strong>{model.name}</strong>
+                <span>{model.role}</span>
+                <p>{model.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <div className="deep-dive-grid results-grid">
+        <section className="deep-dive-panel" aria-labelledby="safety-title">
+          <p className="eyebrow">Safety validation</p>
+          <h3 id="safety-title">Basic safety test results</h3>
+          <div className="safety-grid">
+            {safetyResults.map((result) => (
+              <article key={result.label}>
+                <strong>{result.value}</strong>
+                <span>{result.label}</span>
+                <p>{result.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="deep-dive-panel" aria-labelledby="feasibility-title">
+          <p className="eyebrow">Feasibility score</p>
+          <h3 id="feasibility-title">Above the 75% target</h3>
+          <div className="feasibility-bars">
+            {feasibilityResults.map((result) => (
+              <article key={result.label}>
+                <div>
+                  <span>{result.label}</span>
+                  <strong>{result.value}</strong>
+                </div>
+                <meter min="0" max="100" value={Number.parseInt(result.value, 10)}>
+                  {result.value}
+                </meter>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <section className="deep-dive-panel roadmap-panel" aria-labelledby="roadmap-title">
+        <div>
+          <p className="eyebrow">Next version roadmap</p>
+          <h3 id="roadmap-title">How ALIVE can become field-ready</h3>
+          <p>
+            The poster recommendations point toward a more durable, more autonomous, and more rescue-ready platform.
+          </p>
+        </div>
+        <ul>
+          {roadmapItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+    </section>
+  )
+}
+
 function App() {
   return (
     <main className="site-shell">
       <nav className="topbar" aria-label="Primary navigation">
         <a className="brand" href="#hero" aria-label="ALIVE home">
-          <img src={asset('logo.png')} alt="ALIVE logo" />
+          <img src={asset('logo.png')} alt="ALIVE logo" width={224} height={92} fetchPriority="high" />
         </a>
         <div className="nav-links">
           <a href="#system">System</a>
@@ -363,6 +635,7 @@ function App() {
           <a href="#testing">Testing</a>
           <a href="#vision">Vision AI</a>
           <a href="#impact">Impact</a>
+          <a href="#deep-dive">Deep Dive</a>
         </div>
         <a className="nav-cta" href={driveUrl} target="_blank" rel="noreferrer">
           Source Drive
@@ -384,6 +657,9 @@ function App() {
             <a className="button button-ghost" href="#testing">
               See validation
             </a>
+            <a className="button button-ghost" href="#deep-dive">
+              Read deep dive
+            </a>
           </div>
           <div className="mission-tagline" aria-label="Project tagline">
             Faster Evacuation, More Lives Safely
@@ -397,6 +673,9 @@ function App() {
               className="hero-product"
               src={asset('hero-render.webp')}
               alt="Orange ALIVE smart lifeboat render with twin pontoons"
+              width={1200}
+              height={780}
+              fetchPriority="high"
             />
             <div className="status-chip chip-top">Raspberry Pi + Webcam</div>
             <div className="status-chip chip-bottom">Twin-thruster rescue platform</div>
@@ -441,15 +720,15 @@ function App() {
         </div>
         <div className="render-grid">
           <figure className="render-card large-render">
-            <img src={asset('render-top.webp')} alt="Top view render of ALIVE lifeboat design" />
+            <img src={asset('render-top.webp')} alt="Top view render of ALIVE lifeboat design" width={960} height={720} loading="lazy" />
             <figcaption>Top deck layout for buoyancy, payload, and sensor placement.</figcaption>
           </figure>
           <figure className="render-card">
-            <img src={asset('render-front.webp')} alt="Front view render of ALIVE lifeboat" />
+            <img src={asset('render-front.webp')} alt="Front view render of ALIVE lifeboat" width={760} height={520} loading="lazy" />
             <figcaption>Front-facing rescue profile with wide pontoon stability.</figcaption>
           </figure>
           <figure className="render-card">
-            <img src={asset('render-side.webp')} alt="Side view render of ALIVE lifeboat" />
+            <img src={asset('render-side.webp')} alt="Side view render of ALIVE lifeboat" width={760} height={520} loading="lazy" />
             <figcaption>Low-slung side profile for smooth water movement.</figcaption>
           </figure>
         </div>
@@ -469,7 +748,7 @@ function App() {
         <div className="gallery-grid">
           {galleryImages.map((item) => (
             <figure className="gallery-card" key={item.src}>
-              <img src={asset(item.src)} alt={item.alt} />
+              <img src={asset(item.src)} alt={item.alt} width={900} height={675} loading="lazy" />
               <figcaption>{item.caption}</figcaption>
             </figure>
           ))}
@@ -492,14 +771,14 @@ function App() {
           </div>
         </div>
         <div className="result-panels">
-          <img src={asset('yolov11-results.webp')} alt="YOLOv11n training results chart" />
-          <img src={asset('yolov8-results.webp')} alt="YOLOv8n training results chart" />
+          <img src={asset('yolov11-results.webp')} alt="YOLOv11n training results chart" width={1200} height={900} loading="lazy" />
+          <img src={asset('yolov8-results.webp')} alt="YOLOv8n training results chart" width={1200} height={900} loading="lazy" />
         </div>
       </section>
 
       <section className="section impact-section" id="impact">
         <div className="poster-card">
-          <img src={asset('poster.webp')} alt="ALIVE competition poster with research methodology and findings" />
+          <img src={asset('poster.webp')} alt="ALIVE competition poster with research methodology and findings" width={900} height={1300} loading="lazy" />
         </div>
         <div className="impact-copy">
           <p className="eyebrow">Human impact</p>
@@ -524,7 +803,7 @@ function App() {
       </section>
 
       <section className="team-section" aria-label="ALIVE team and prototype">
-        <img src={asset('team.webp')} alt="ALIVE student team with prototype beside the water" />
+        <img src={asset('team.webp')} alt="ALIVE student team with prototype beside the water" width={1200} height={900} loading="lazy" />
         <div>
           <p className="eyebrow">Built by young innovators</p>
           <h2>From classroom research to water-tested prototype.</h2>
@@ -534,6 +813,8 @@ function App() {
           </p>
         </div>
       </section>
+
+      <ProjectDeepDive />
     </main>
   )
 }
