@@ -1103,16 +1103,16 @@
   position: fixed;
   top: clamp(100px, 13vh, 138px);
   left: clamp(18px, 3vw, 48px);
-  width: min(360px, calc(100vw - 36px));
-  padding: clamp(16px, 1.7vw, 22px);
-  border-radius: 26px;
+  width: min(280px, calc(100vw - 36px));
+  padding: clamp(12px, 1.3vw, 16px);
+  border-radius: 22px;
   animation: commandReveal 820ms var(--motion) both;
 }
 
 .view360-cockpit .view360-copy h1 {
-  max-width: 330px;
-  font-size: clamp(2.35rem, 4vw, 4.5rem);
-  line-height: 0.84;
+  max-width: 250px;
+  font-size: clamp(1.8rem, 2.9vw, 3.2rem);
+  line-height: 0.88;
 }
 
 .view360-cockpit .view360-copy p:not(.eyebrow) {
@@ -1123,12 +1123,15 @@
 }
 
 .view360-cockpit .view360-stats {
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-top: 2px;
 }
 
 .view360-cockpit .view360-stats span {
-  padding: 7px 10px;
-  font-size: 0.62rem;
+  padding: 6px 9px;
+  font-size: 0.58rem;
 }
 
 .view360-cockpit .view360-source {
@@ -1157,13 +1160,23 @@
 
 .view360-cockpit .scene-strip {
   position: fixed;
-  left: clamp(420px, 31vw, 560px);
+  left: clamp(330px, 25vw, 430px);
   right: clamp(18px, 3vw, 48px);
   bottom: clamp(16px, 3vh, 30px);
   width: auto;
-  padding: 10px;
-  border-radius: 26px;
+  padding: 8px;
+  border-radius: 22px;
   transform: none;
+}
+
+.view360-cockpit .scene-strip button {
+  gap: 5px;
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.view360-cockpit .scene-strip img {
+  max-height: 96px;
 }
 
 .view360-cockpit .scene-caption {

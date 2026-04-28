@@ -379,19 +379,23 @@ function View360({ variant = 'section' }: View360Props) {
           {isFocusVariant ? 'Live route · fullscreen rescue cockpit' : 'Immersive evidence · Photo Sphere boat viewer'}
         </p>
         {isFocusVariant ? <h1 id="view360-title">360° Command View</h1> : <h2 id="view360-title">360° Product View</h2>}
-        <p>
-          {isFocusVariant
-            ? 'A fullscreen rescue cockpit for inspecting the ALIVE panorama set. Drag inside the viewer, step through source scenes, and track camera heading without triggering browser fullscreen overlays.'
-            : 'The dedicated 360° Drive folder now renders as a true photo-sphere viewer like the previous working museum 360 experience. Drag directly inside the viewer to look around the ALIVE boat, use the camera controls, or switch source scenes to inspect each field panorama.'}
-        </p>
+        {!isFocusVariant && (
+          <p>
+            The dedicated 360° Drive folder now renders as a true photo-sphere viewer like the previous working museum
+            360 experience. Drag directly inside the viewer to look around the ALIVE boat, use the camera controls, or
+            switch source scenes to inspect each field panorama.
+          </p>
+        )}
         <div className="view360-stats" aria-label="360 panorama details">
           <span>6 equirectangular panoramas</span>
           <span>Photo Sphere Viewer</span>
           <span>True drag-to-rotate 360°</span>
         </div>
-        <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
-          Open 360° source folder
-        </a>
+        {!isFocusVariant && (
+          <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
+            Open 360° source folder
+          </a>
+        )}
       </div>
 
       <div className={`viewer-shell${isFullscreen ? ' viewer-shell-fullscreen' : ''}`} ref={viewerShellRef}>

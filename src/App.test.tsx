@@ -145,6 +145,8 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByRole('link', { name: /Back to showcase/i })).toHaveAttribute('href', '/')
     expect(screen.queryByRole('button', { name: /enter fullscreen 360 viewer/i })).not.toBeInTheDocument()
     expect(screen.getByText(/Fullscreen page/i)).toBeInTheDocument()
+    expect(screen.queryByText(/without triggering browser fullscreen overlays/i)).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Open 360° source folder/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /ALIVE: Advanced Lifeboat/i })).not.toBeInTheDocument()
   })
 
@@ -154,9 +156,10 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.view360-cockpit\s+\.panorama-window\s*\{[\s\S]*height:\s*100svh/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*position:\s*fixed/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*position:\s*fixed/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*width:\s*min\(360px,\s*calc\(100vw - 36px\)\)/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*font-size:\s*clamp\(2\.35rem,\s*4vw,\s*4\.5rem\)/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*clamp\(420px,\s*31vw,\s*560px\)[\s\S]*right:\s*clamp\(18px,\s*3vw,\s*48px\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*width:\s*min\(280px,\s*calc\(100vw - 36px\)\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*font-size:\s*clamp\(1\.8rem,\s*2\.9vw,\s*3\.2rem\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*clamp\(330px,\s*25vw,\s*430px\)[\s\S]*right:\s*clamp\(18px,\s*3vw,\s*48px\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip img\s*\{[\s\S]*max-height:\s*96px/)
   })
 
   it('does not invoke native browser fullscreen from the dedicated 360 route', async () => {
