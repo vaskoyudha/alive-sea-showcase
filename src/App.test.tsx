@@ -132,16 +132,26 @@ describe('ALIVE project showcase', () => {
   it('renders a dedicated 360 viewer page route', () => {
     window.history.pushState({}, '', '/view-360')
 
-    render(<App />)
+    const { container } = render(<App />)
 
     expect(screen.getByRole('heading', { level: 1, name: /360° Command View/i })).toBeInTheDocument()
-    expect(screen.getByText(/focused inspection route/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/fullscreen rescue cockpit/i).length).toBeGreaterThan(0)
+    expect(container.querySelector('.view360-cockpit')).toBeInTheDocument()
+    expect(container.querySelector('.view360-page-hero')).not.toBeInTheDocument()
     expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAttribute(
       'data-panorama-src',
       '/alive/360/scene-01.webp',
     )
     expect(screen.getByRole('link', { name: /Back to showcase/i })).toHaveAttribute('href', '/')
     expect(screen.queryByRole('heading', { name: /ALIVE: Advanced Lifeboat/i })).not.toBeInTheDocument()
+  })
+
+  it('styles the dedicated 360 route as a fullscreen cockpit', () => {
+    expect(cssText).toMatch(/\.view360-page-shell\s*\{[\s\S]*width:\s*100%[\s\S]*min-height:\s*100svh/)
+    expect(cssText).toMatch(/\.view360-cockpit\s*\{[\s\S]*min-height:\s*100svh[\s\S]*border-radius:\s*0/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.panorama-window\s*\{[\s\S]*height:\s*100svh/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*position:\s*fixed/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*position:\s*fixed/)
   })
 
   it('configures Vercel to serve client-side routes through the app shell', () => {

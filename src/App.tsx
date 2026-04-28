@@ -371,18 +371,18 @@ function View360({ variant = 'section' }: View360Props) {
 
   return (
     <section
-      className={`section view360-section${isFocusVariant ? ' view360-section-focus' : ''}`}
+      className={`section view360-section${isFocusVariant ? ' view360-section-focus view360-cockpit' : ''}`}
       id="view360"
       aria-labelledby="view360-title"
     >
       <div className="view360-copy">
         <p className="eyebrow">
-          {isFocusVariant ? 'Dedicated route · Photo Sphere inspection' : 'Immersive evidence · Photo Sphere boat viewer'}
+          {isFocusVariant ? 'Live route · fullscreen rescue cockpit' : 'Immersive evidence · Photo Sphere boat viewer'}
         </p>
-        <h2 id="view360-title">360° Product View</h2>
+        {isFocusVariant ? <h1 id="view360-title">360° Command View</h1> : <h2 id="view360-title">360° Product View</h2>}
         <p>
           {isFocusVariant
-            ? 'Use this dedicated route as a focused inspection station for the ALIVE panorama set. Drag inside the viewer, step through each source scene, and switch fullscreen when you need a larger field view.'
+            ? 'A fullscreen rescue cockpit for inspecting the ALIVE panorama set. Drag inside the viewer, step through source scenes, track camera heading, and switch native fullscreen when you need a larger field view.'
             : 'The dedicated 360° Drive folder now renders as a true photo-sphere viewer like the previous working museum 360 experience. Drag directly inside the viewer to look around the ALIVE boat, use the camera controls, or switch source scenes to inspect each field panorama.'}
         </p>
         <div className="view360-stats" aria-label="360 panorama details">
@@ -467,7 +467,7 @@ function View360Page() {
           <img src={asset('logo.png')} alt="ALIVE logo" width={224} height={92} fetchPriority="high" />
         </a>
         <div className="nav-links">
-          <a href="/">Showcase</a>
+          <a href="/">Back to showcase</a>
           <a href={panoramaDriveUrl} target="_blank" rel="noreferrer">
             Source panoramas
           </a>
@@ -476,32 +476,6 @@ function View360Page() {
           Source Drive
         </a>
       </nav>
-
-      <section className="view360-page-hero" aria-labelledby="view360-page-title">
-        <div>
-          <p className="eyebrow">ALIVE 360 route · command inspection mode</p>
-          <h1 id="view360-page-title">360° Command View</h1>
-          <p>
-            A focused inspection route for exploring the ALIVE boat panoramas without the rest of the showcase competing
-            for attention. Use it when you want the prototype environment, source scenes, and fullscreen viewer in one
-            dedicated control surface.
-          </p>
-          <div className="view360-page-actions">
-            <a className="button button-primary" href="#view360">
-              Start inspection
-            </a>
-            <a className="button button-ghost" href="/">
-              Back to showcase
-            </a>
-          </div>
-        </div>
-        <div className="view360-page-pills" aria-label="360 route highlights">
-          <span>6 source scenes</span>
-          <span>Fullscreen ready</span>
-          <span>Drag-to-rotate</span>
-        </div>
-      </section>
-
       <View360 variant="focus" />
     </main>
   )
