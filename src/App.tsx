@@ -231,6 +231,7 @@ function View360({ variant = 'section' }: View360Props) {
   const bearingRef = useRef(initialBoatYaw)
   const activeScene = panoramaScenes[sceneIndex]
   const activePanoramaSrc = asset(activeScene.src)
+  const isFocusVariant = variant === 'focus'
 
   useEffect(() => {
     bearingRef.current = bearing
@@ -250,7 +251,7 @@ function View360({ variant = 'section' }: View360Props) {
       defaultZoomLvl: initialBoatZoom,
       mousewheelCtrlKey: false,
       touchmoveTwoFingers: false,
-      navbar: ['zoom', 'move', 'caption', 'fullscreen'],
+      navbar: isFocusVariant ? ['zoom', 'move', 'caption'] : ['zoom', 'move', 'caption', 'fullscreen'],
     })
 
     viewerRef.current = viewer
@@ -259,7 +260,7 @@ function View360({ variant = 'section' }: View360Props) {
       viewerRef.current = null
       viewer.destroy()
     }
-  }, [])
+  }, [isFocusVariant])
 
   useEffect(() => {
     const viewer = viewerRef.current
@@ -367,8 +368,6 @@ function View360({ variant = 'section' }: View360Props) {
     setIsFullscreen(true)
   }
 
-  const isFocusVariant = variant === 'focus'
-
   return (
     <section
       className={`section view360-section${isFocusVariant ? ' view360-section-focus view360-cockpit' : ''}`}
@@ -382,7 +381,7 @@ function View360({ variant = 'section' }: View360Props) {
         {isFocusVariant ? <h1 id="view360-title">360° Command View</h1> : <h2 id="view360-title">360° Product View</h2>}
         <p>
           {isFocusVariant
-            ? 'A fullscreen rescue cockpit for inspecting the ALIVE panorama set. Drag inside the viewer, step through source scenes, track camera heading, and switch native fullscreen when you need a larger field view.'
+            ? 'A fullscreen rescue cockpit for inspecting the ALIVE panorama set. Drag inside the viewer, step through source scenes, and track camera heading without triggering browser fullscreen overlays.'
             : 'The dedicated 360° Drive folder now renders as a true photo-sphere viewer like the previous working museum 360 experience. Drag directly inside the viewer to look around the ALIVE boat, use the camera controls, or switch source scenes to inspect each field panorama.'}
         </p>
         <div className="view360-stats" aria-label="360 panorama details">
@@ -400,15 +399,19 @@ function View360({ variant = 'section' }: View360Props) {
           <span>ALIVE / BOAT 360</span>
           <div className="viewer-topline-actions">
             <strong>{activeScene.label}</strong>
-            <button
-              type="button"
-              className="fullscreen-toggle"
-              onClick={() => void toggleFullscreen()}
-              aria-label={isFullscreen ? 'Exit fullscreen 360 viewer' : 'Enter fullscreen 360 viewer'}
-              aria-pressed={isFullscreen}
-            >
-              {isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-            </button>
+            {isFocusVariant ? (
+              <span className="cockpit-mode">Fullscreen page</span>
+            ) : (
+              <button
+                type="button"
+                className="fullscreen-toggle"
+                onClick={() => void toggleFullscreen()}
+                aria-label={isFullscreen ? 'Exit fullscreen 360 viewer' : 'Enter fullscreen 360 viewer'}
+                aria-pressed={isFullscreen}
+              >
+                {isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+              </button>
+            )}
           </div>
         </div>
         <div

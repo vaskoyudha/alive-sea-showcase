@@ -143,6 +143,8 @@ describe('ALIVE project showcase', () => {
       '/alive/360/scene-01.webp',
     )
     expect(screen.getByRole('link', { name: /Back to showcase/i })).toHaveAttribute('href', '/')
+    expect(screen.queryByRole('button', { name: /enter fullscreen 360 viewer/i })).not.toBeInTheDocument()
+    expect(screen.getByText(/Fullscreen page/i)).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /ALIVE: Advanced Lifeboat/i })).not.toBeInTheDocument()
   })
 
@@ -152,6 +154,27 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.view360-cockpit\s+\.panorama-window\s*\{[\s\S]*height:\s*100svh/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*position:\s*fixed/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*position:\s*fixed/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*width:\s*min\(360px,\s*calc\(100vw - 36px\)\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*font-size:\s*clamp\(2\.35rem,\s*4vw,\s*4\.5rem\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*clamp\(420px,\s*31vw,\s*560px\)[\s\S]*right:\s*clamp\(18px,\s*3vw,\s*48px\)/)
+  })
+
+  it('does not invoke native browser fullscreen from the dedicated 360 route', async () => {
+    const requestFullscreen = vi.fn().mockResolvedValue(undefined)
+    Object.defineProperty(HTMLElement.prototype, 'requestFullscreen', {
+      configurable: true,
+      value: requestFullscreen,
+    })
+    Object.defineProperty(document, 'fullscreenEnabled', {
+      configurable: true,
+      value: true,
+    })
+    window.history.pushState({}, '', '/view-360')
+
+    render(<App />)
+
+    expect(screen.queryByRole('button', { name: /enter fullscreen 360 viewer/i })).not.toBeInTheDocument()
+    expect(requestFullscreen).not.toHaveBeenCalled()
   })
 
   it('configures Vercel to serve client-side routes through the app shell', () => {

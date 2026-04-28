@@ -1103,22 +1103,32 @@
   position: fixed;
   top: clamp(100px, 13vh, 138px);
   left: clamp(18px, 3vw, 48px);
-  width: min(470px, calc(100vw - 36px));
-  padding: clamp(18px, 2vw, 26px);
-  border-radius: 30px;
+  width: min(360px, calc(100vw - 36px));
+  padding: clamp(16px, 1.7vw, 22px);
+  border-radius: 26px;
   animation: commandReveal 820ms var(--motion) both;
 }
 
 .view360-cockpit .view360-copy h1 {
-  max-width: 420px;
-  font-size: clamp(3rem, 5.7vw, 6.7rem);
-  line-height: 0.82;
+  max-width: 330px;
+  font-size: clamp(2.35rem, 4vw, 4.5rem);
+  line-height: 0.84;
 }
 
 .view360-cockpit .view360-copy p:not(.eyebrow) {
-  max-width: 430px;
+  max-width: 320px;
   color: #d7e7e8;
-  font-size: 0.98rem;
+  font-size: 0.88rem;
+  line-height: 1.58;
+}
+
+.view360-cockpit .view360-stats {
+  gap: 8px;
+}
+
+.view360-cockpit .view360-stats span {
+  padding: 7px 10px;
+  font-size: 0.62rem;
 }
 
 .view360-cockpit .view360-source {
@@ -1147,12 +1157,13 @@
 
 .view360-cockpit .scene-strip {
   position: fixed;
-  left: 50%;
+  left: clamp(420px, 31vw, 560px);
+  right: clamp(18px, 3vw, 48px);
   bottom: clamp(16px, 3vh, 30px);
-  width: min(1080px, calc(100vw - 36px));
+  width: auto;
   padding: 10px;
   border-radius: 26px;
-  transform: translateX(-50%);
+  transform: none;
 }
 
 .view360-cockpit .scene-caption {
@@ -1248,6 +1259,17 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 520ms var(--motion), border-color 520ms var(--motion), background 520ms var(--motion);
+}
+
+.cockpit-mode {
+  min-height: 34px;
+  padding: 9px 12px;
+  border: 1px solid rgba(101, 242, 255, 0.22);
+  border-radius: 999px;
+  color: #dffaff;
+  background: rgba(101, 242, 255, 0.1);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
 }
 
 .fullscreen-toggle:hover {
@@ -1708,6 +1730,12 @@ body.viewer-fullscreen-open {
     width: auto;
   }
 
+  .view360-cockpit .scene-strip {
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
+
   .view360-cockpit .viewer-topline {
     top: auto;
     bottom: 144px;
@@ -1883,6 +1911,8 @@ body.viewer-fullscreen-open {
   }
 
   .view360-cockpit .scene-strip {
+    left: 10px;
+    right: auto;
     bottom: 10px;
     width: calc(100vw - 20px);
     max-height: 86px;
