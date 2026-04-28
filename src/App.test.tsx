@@ -3,6 +3,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 import cssText from './App.css?raw'
+import vercelConfigText from '../vercel.json?raw'
 import './setupTests'
 
 describe('ALIVE project showcase', () => {
@@ -141,5 +142,16 @@ describe('ALIVE project showcase', () => {
     )
     expect(screen.getByRole('link', { name: /Back to showcase/i })).toHaveAttribute('href', '/')
     expect(screen.queryByRole('heading', { name: /ALIVE: Advanced Lifeboat/i })).not.toBeInTheDocument()
+  })
+
+  it('configures Vercel to serve client-side routes through the app shell', () => {
+    const vercelConfig = JSON.parse(vercelConfigText) as {
+      rewrites?: Array<{ source: string; destination: string }>
+    }
+
+    expect(vercelConfig.rewrites).toContainEqual({
+      source: '/(.*)',
+      destination: '/index.html',
+    })
   })
 })
