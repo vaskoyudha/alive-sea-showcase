@@ -8,6 +8,7 @@ import './setupTests'
 describe('ALIVE project showcase', () => {
   afterEach(() => {
     vi.restoreAllMocks()
+    window.history.pushState({}, '', '/')
   })
 
   it('presents the ALIVE flood-rescue mission in English in the hero', () => {
@@ -125,5 +126,20 @@ describe('ALIVE project showcase', () => {
     })
 
     expect(requestFullscreen).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders a dedicated 360 viewer page route', () => {
+    window.history.pushState({}, '', '/view-360')
+
+    render(<App />)
+
+    expect(screen.getByRole('heading', { level: 1, name: /360° Command View/i })).toBeInTheDocument()
+    expect(screen.getByText(/focused inspection route/i)).toBeInTheDocument()
+    expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAttribute(
+      'data-panorama-src',
+      '/alive/360/scene-01.webp',
+    )
+    expect(screen.getByRole('link', { name: /Back to showcase/i })).toHaveAttribute('href', '/')
+    expect(screen.queryByRole('heading', { name: /ALIVE: Advanced Lifeboat/i })).not.toBeInTheDocument()
   })
 })
