@@ -1160,12 +1160,16 @@
 
 .view360-cockpit .scene-strip {
   position: fixed;
-  left: clamp(330px, 25vw, 430px);
+  top: clamp(230px, 27vh, 310px);
+  left: auto;
   right: clamp(18px, 3vw, 48px);
-  bottom: clamp(16px, 3vh, 30px);
-  width: auto;
+  bottom: auto;
+  width: 112px;
+  max-height: min(52svh, 520px);
   padding: 8px;
   border-radius: 22px;
+  grid-template-columns: 1fr;
+  overflow-y: auto;
   transform: none;
 }
 
@@ -1176,7 +1180,7 @@
 }
 
 .view360-cockpit .scene-strip img {
-  max-height: 96px;
+  max-height: 48px;
 }
 
 .view360-cockpit .scene-caption {
@@ -1744,9 +1748,12 @@ body.viewer-fullscreen-open {
   }
 
   .view360-cockpit .scene-strip {
-    left: 16px;
+    top: clamp(220px, 34vh, 310px);
+    left: auto;
     right: 16px;
-    width: auto;
+    width: 96px;
+    max-height: min(44svh, 360px);
+    grid-template-columns: 1fr;
   }
 
   .view360-cockpit .viewer-topline {
@@ -1924,18 +1931,21 @@ body.viewer-fullscreen-open {
   }
 
   .view360-cockpit .scene-strip {
-    left: 10px;
-    right: auto;
-    bottom: 10px;
-    width: calc(100vw - 20px);
-    max-height: 86px;
-    grid-template-columns: repeat(6, minmax(72px, 1fr));
-    overflow-x: auto;
+    top: auto;
+    left: auto;
+    right: 10px;
+    bottom: 228px;
+    width: 74px;
+    max-height: 178px;
+    grid-template-columns: 1fr;
+    overflow-y: auto;
     border-radius: 20px;
   }
 
   .view360-cockpit .scene-strip button {
-    min-width: 72px;
+    min-width: 0;
+    place-items: center;
+    text-align: center;
   }
 
   .view360-cockpit .scene-strip img {

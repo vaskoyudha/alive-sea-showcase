@@ -158,8 +158,10 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*position:\s*fixed/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*width:\s*min\(280px,\s*calc\(100vw - 36px\)\)/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*font-size:\s*clamp\(1\.8rem,\s*2\.9vw,\s*3\.2rem\)/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*clamp\(330px,\s*25vw,\s*430px\)[\s\S]*right:\s*clamp\(18px,\s*3vw,\s*48px\)/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip img\s*\{[\s\S]*max-height:\s*96px/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*top:\s*clamp\(230px,\s*27vh,\s*310px\)[\s\S]*right:\s*clamp\(18px,\s*3vw,\s*48px\)[\s\S]*bottom:\s*auto/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*width:\s*112px[\s\S]*grid-template-columns:\s*1fr/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip img\s*\{[\s\S]*max-height:\s*48px/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*right:\s*10px[\s\S]*bottom:\s*228px[\s\S]*width:\s*74px[\s\S]*grid-template-columns:\s*1fr/)
   })
 
   it('does not invoke native browser fullscreen from the dedicated 360 route', async () => {
