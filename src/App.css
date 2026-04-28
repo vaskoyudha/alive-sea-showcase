@@ -320,6 +320,7 @@
 }
 
 .metric-card,
+.brief-grid article,
 .feature-card,
 .render-card,
 .gallery-card,
@@ -345,6 +346,7 @@
 }
 
 .metric-card:hover,
+.brief-grid article:hover,
 .feature-card:hover,
 .gallery-card:hover,
 .render-card:hover,
@@ -691,7 +693,14 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.brief-grid article,
+.brief-grid article {
+  min-width: 0;
+  min-height: clamp(220px, 18vw, 352px);
+  padding: clamp(20px, 2vw, 24px);
+  border-radius: 28px;
+  transition: transform 620ms var(--motion), border-color 620ms var(--motion), background 620ms var(--motion);
+}
+
 .anatomy-grid article,
 .performance-grid article,
 .safety-grid article,
@@ -727,6 +736,13 @@
   line-height: 0.95;
   letter-spacing: -0.065em;
   font-variant-numeric: tabular-nums;
+}
+
+.brief-grid strong {
+  max-width: 100%;
+  font-size: clamp(1.65rem, 2.35vw, 2.8rem);
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 .brief-grid p,
