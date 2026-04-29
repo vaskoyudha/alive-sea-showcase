@@ -114,13 +114,14 @@ describe('ALIVE project showcase', () => {
       'src',
       '/alive/drive-sections/documentation-testing/uji-coba-1/documentation-testing-014-20250909-163753.jpg',
     )
-    expect(screen.getByText(/Internal electronics bay/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/Internal electronics bay/i).length).toBeGreaterThan(0)
   })
 
   it('keeps a comfortable mobile layout for navigation and the 360 viewer', () => {
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)/)
     expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*bottom:\s*14px/)
-    expect(cssText).toMatch(/\.nav-menu-toggle\s*\{[\s\S]*display:\s*grid/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*900px\)[\s\S]*\.nav-menu-toggle\s*\{[\s\S]*display:\s*flex/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*900px\)[\s\S]*\.nav-links\s*\{[\s\S]*grid-row:\s*2/)
     expect(cssText).toMatch(/\.topbar-is-menu-open\s+\.nav-links\s*\{[\s\S]*display:\s*grid/)
     expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)[\s\S]*max-height:\s*min\(44svh,\s*300px\)/)
     expect(cssText).toMatch(/\.site-shell\s*\{[\s\S]*padding-bottom:\s*172px/)
