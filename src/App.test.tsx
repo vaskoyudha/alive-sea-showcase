@@ -280,6 +280,9 @@ describe('ALIVE project showcase', () => {
 
     expect(screen.getByRole('link', { name: /^360$/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /360° Product View/i })).toBeInTheDocument()
+    expect(screen.getByText(/ALIVE \/ 360 boat viewer/i)).toBeInTheDocument()
+    expect(screen.getByText(/Explore ALIVE through six field-captured panoramas/i)).toBeInTheDocument()
+    expect(screen.getByText(/6 panorama scenes/i)).toBeInTheDocument()
     expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAttribute(
       'data-panorama-src',
       '/alive/360/scene-01.webp',
@@ -287,6 +290,13 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAccessibleName(/ALIVE boat 360 viewer/i)
     expect(screen.getByRole('button', { name: /rotate 360 camera left/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /rotate 360 camera right/i })).toBeInTheDocument()
+  })
+
+  it('keeps the 360 intro badges compact and on one line', () => {
+    expect(cssText).toMatch(/\.view360-copy\s*>\s*\.eyebrow\s*\{[\s\S]*font-size:\s*0\.58rem/)
+    expect(cssText).toMatch(/\.view360-copy\s*>\s*\.eyebrow\s*\{[\s\S]*white-space:\s*nowrap/)
+    expect(cssText).toMatch(/\.view360-stats\s*\{[\s\S]*flex-wrap:\s*nowrap/)
+    expect(cssText).toMatch(/\.view360-stats span\s*\{[\s\S]*white-space:\s*nowrap/)
   })
 
   it('lets visitors rotate the boat 360 camera and switch panorama scenes', () => {
@@ -330,7 +340,7 @@ describe('ALIVE project showcase', () => {
     const { container } = render(<App />)
 
     expect(screen.getByRole('heading', { level: 1, name: /360° Command View/i })).toBeInTheDocument()
-    expect(screen.getAllByText(/fullscreen rescue cockpit/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Live route \/ rescue cockpit/i).length).toBeGreaterThan(0)
     expect(container.querySelector('.view360-cockpit')).toBeInTheDocument()
     expect(container.querySelector('.view360-page-hero')).not.toBeInTheDocument()
     expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAttribute(

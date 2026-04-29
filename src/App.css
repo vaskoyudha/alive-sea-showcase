@@ -1561,6 +1561,14 @@
   font-size: 1.04rem;
 }
 
+.view360-copy > .eyebrow {
+  padding: 5px 10px;
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
 .section-detail-shell,
 .evidence-index-shell {
   width: min(100%, 1540px);
@@ -1819,9 +1827,16 @@
 
 .view360-stats {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin-top: 8px;
+}
+
+.view360-stats span {
+  padding: 7px 10px;
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .view360-source {

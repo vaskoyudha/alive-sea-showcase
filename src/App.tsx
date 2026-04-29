@@ -392,20 +392,20 @@ function View360({ variant = 'section' }: View360Props) {
     >
       <div className="view360-copy">
         <p className="eyebrow">
-          {isFocusVariant ? 'Live route · fullscreen rescue cockpit' : 'Immersive showcase · Photo Sphere boat viewer'}
+          {isFocusVariant ? 'Live route / rescue cockpit' : 'ALIVE / 360 boat viewer'}
         </p>
         {isFocusVariant ? <h1 id="view360-title">360° Command View</h1> : <h2 id="view360-title">360° Product View</h2>}
         {!isFocusVariant && (
           <p>
-            The dedicated 360° Drive folder now renders as a true photo-sphere viewer like the previous working museum
-            360 experience. Drag directly inside the viewer to look around the ALIVE boat, use the camera controls, or
-            switch source scenes to inspect each field panorama.
+            Explore ALIVE through six field-captured panoramas that document the prototype in its real waterfront testing
+            environment. Rotate each scene to inspect the hull profile, onboard layout, and deployment context from every
+            angle.
           </p>
         )}
         <div className="view360-stats" aria-label="360 panorama details">
-          <span>6 equirectangular panoramas</span>
-          <span>Photo Sphere Viewer</span>
-          <span>True drag-to-rotate 360°</span>
+          <span>6 panorama scenes</span>
+          <span>Photo Sphere</span>
+          <span>Drag-to-rotate 360°</span>
         </div>
         {!isFocusVariant && (
           <div className="section-actions view360-actions">
