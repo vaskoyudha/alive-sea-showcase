@@ -172,6 +172,62 @@
   text-decoration: none;
 }
 
+.nav-menu-toggle {
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(226, 247, 250, 0.18);
+  border-radius: 999px;
+  color: #f1fcff;
+  background:
+    linear-gradient(180deg, rgba(201, 242, 251, 0.09), rgba(8, 24, 40, 0.12)),
+    rgba(108, 165, 181, 0.06);
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 12px 32px rgba(0, 8, 20, 0.22);
+  transition:
+    transform 420ms var(--motion),
+    border-color 420ms var(--motion),
+    background 420ms var(--motion);
+}
+
+.nav-menu-toggle span {
+  display: block;
+  width: 17px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transition:
+    opacity 320ms var(--motion),
+    transform 320ms var(--motion);
+}
+
+.nav-menu-toggle span + span {
+  margin-top: 4px;
+}
+
+.nav-menu-toggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 106, 26, 0.46);
+  background:
+    linear-gradient(180deg, rgba(201, 242, 251, 0.12), rgba(8, 24, 40, 0.16)),
+    rgba(101, 242, 255, 0.1);
+}
+
+.topbar-is-menu-open .nav-menu-toggle span:first-child {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.topbar-is-menu-open .nav-menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.topbar-is-menu-open .nav-menu-toggle span:last-child {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
 .nav-links a {
   position: relative;
   padding: 8px 9px;
@@ -353,7 +409,7 @@
   display: grid;
   gap: 0.02em;
   max-width: 860px;
-  font-size: clamp(2.45rem, 5.2vw, 5.9rem);
+  font-size: clamp(2rem, 4.2vw, 4.9rem);
   line-height: 0.92;
 }
 
@@ -602,6 +658,60 @@
   margin-bottom: clamp(98px, 12vw, 180px);
 }
 
+.section[data-backdrop-text],
+.design-board[data-backdrop-text],
+.team-section[data-backdrop-text] {
+  position: relative;
+  isolation: isolate;
+}
+
+.section[data-backdrop-text] > *,
+.design-board[data-backdrop-text] > *,
+.team-section[data-backdrop-text] > * {
+  position: relative;
+  z-index: 1;
+}
+
+.section[data-backdrop-text]::before,
+.design-board[data-backdrop-text]::after,
+.team-section[data-backdrop-text]::before,
+.view360-section[data-backdrop-text]::after {
+  content: attr(data-backdrop-text);
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  color: rgba(111, 199, 255, 0.05);
+  font-size: clamp(5.4rem, 17vw, 18.5rem);
+  font-weight: 900;
+  letter-spacing: -0.12em;
+  line-height: 0.72;
+  text-shadow: 0 0 84px rgba(48, 158, 255, 0.18);
+  white-space: nowrap;
+}
+
+.split-section::before,
+.vision-section::before,
+.deep-dive-section::before {
+  top: -0.18em;
+  right: -0.08em;
+}
+
+.testing-section::before,
+.impact-section::before {
+  top: -0.18em;
+  left: -0.08em;
+}
+
+.design-board[data-backdrop-text]::after {
+  right: -0.09em;
+  bottom: 0.08em;
+}
+
+.team-section[data-backdrop-text]::before {
+  top: -0.18em;
+  right: -0.08em;
+}
+
 .split-section {
   display: grid;
   grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
@@ -671,6 +781,7 @@
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 0;
   opacity: 0.34;
   background-image: repeating-radial-gradient(ellipse at 0% 100%, rgba(101, 242, 255, 0.18) 0 1px, transparent 1px 30px);
 }
@@ -1085,6 +1196,10 @@
   object-position: center;
 }
 
+.evidence-wall-electronics img {
+  object-position: 78% 58%;
+}
+
 .evidence-wall figure:first-child img {
   aspect-ratio: 3 / 4;
   object-position: top;
@@ -1243,6 +1358,12 @@
 }
 
 .view360-cockpit {
+  --cockpit-edge: clamp(18px, 3vw, 48px);
+  --cockpit-top: clamp(128px, 15svh, 156px);
+  --cockpit-control-bottom: clamp(72px, 9svh, 108px);
+  --cockpit-info-bottom: calc(var(--cockpit-control-bottom) + 82px);
+  --cockpit-scene-rail: 112px;
+  --cockpit-scene-gap: 18px;
   display: block;
   min-height: 100svh;
   margin: 0;
@@ -1314,8 +1435,8 @@
 
 .view360-cockpit .view360-copy {
   position: fixed;
-  top: clamp(100px, 13vh, 138px);
-  left: clamp(18px, 3vw, 48px);
+  top: var(--cockpit-top);
+  left: var(--cockpit-edge);
   width: min(280px, calc(100vw - 36px));
   padding: clamp(12px, 1.3vw, 16px);
   border-radius: 22px;
@@ -1353,8 +1474,8 @@
 
 .view360-cockpit .viewer-topline {
   position: fixed;
-  top: clamp(100px, 13vh, 138px);
-  right: clamp(18px, 3vw, 48px);
+  top: var(--cockpit-top);
+  right: var(--cockpit-edge);
   width: min(430px, calc(100vw - 36px));
   align-items: center;
   padding: 14px;
@@ -1364,7 +1485,7 @@
 .view360-cockpit .viewer-controls {
   position: fixed;
   left: 50%;
-  bottom: clamp(130px, 16vh, 178px);
+  bottom: var(--cockpit-control-bottom);
   width: min(540px, calc(100vw - 36px));
   padding: 12px;
   border-radius: 999px;
@@ -1373,12 +1494,11 @@
 
 .view360-cockpit .scene-strip {
   position: fixed;
-  top: clamp(230px, 27vh, 310px);
+  top: calc(var(--cockpit-top) + 106px);
   left: auto;
-  right: clamp(18px, 3vw, 48px);
-  bottom: auto;
-  width: 112px;
-  max-height: min(52svh, 520px);
+  right: var(--cockpit-edge);
+  bottom: calc(var(--cockpit-info-bottom) + 8px);
+  width: var(--cockpit-scene-rail);
   padding: 8px;
   border-radius: 22px;
   grid-template-columns: 1fr;
@@ -1397,26 +1517,32 @@
 }
 
 .view360-cockpit .scene-caption {
-  right: clamp(18px, 3vw, 48px);
-  bottom: clamp(150px, 18vh, 210px);
+  right: calc(var(--cockpit-edge) + var(--cockpit-scene-rail) + var(--cockpit-scene-gap));
+  bottom: var(--cockpit-info-bottom);
 }
 
 .view360-cockpit .drag-hint {
   top: auto;
-  bottom: clamp(150px, 18vh, 210px);
-  left: clamp(18px, 3vw, 48px);
+  bottom: var(--cockpit-info-bottom);
+  left: var(--cockpit-edge);
 }
 
 .view360-section::before {
   content: '';
   position: absolute;
   inset: -30% -20% auto auto;
+  z-index: 0;
   width: 55%;
   aspect-ratio: 1;
   border-radius: 999px;
   background: radial-gradient(circle, rgba(101, 242, 255, 0.2), transparent 66%);
   filter: blur(12px);
   pointer-events: none;
+}
+
+.view360-section[data-backdrop-text]::after {
+  top: -0.16em;
+  right: -0.08em;
 }
 
 .view360-copy {
@@ -1476,7 +1602,7 @@
 }
 
 .section-detail-copy h1 {
-  font-size: clamp(2.8rem, 7.6vw, 7.6rem);
+  font-size: clamp(2.25rem, 5.8vw, 5.8rem);
   overflow-wrap: anywhere;
 }
 
@@ -2144,7 +2270,7 @@ body.viewer-fullscreen-open {
   }
 
   .section-detail-copy h1 {
-    font-size: clamp(2rem, 10vw, 3.2rem);
+    font-size: clamp(1.75rem, 8.4vw, 2.65rem);
     line-height: 0.94;
   }
 
@@ -2234,11 +2360,50 @@ body.viewer-fullscreen-open {
   }
 
   .topbar {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     border-radius: 26px;
   }
 
+  .nav-menu-toggle {
+    display: grid;
+    justify-self: end;
+  }
+
   .nav-links {
+    grid-column: 1 / -1;
+    display: none;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    max-height: min(42svh, 330px);
+    padding: 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid rgba(191, 235, 245, 0.12);
+    border-radius: 20px;
+    background: rgba(2, 9, 16, 0.42);
+    scrollbar-width: thin;
+  }
+
+  .topbar-is-menu-open .nav-links {
+    display: grid;
+  }
+
+  .nav-links a {
+    display: grid;
+    min-height: 38px;
+    place-items: center;
+    padding: 0 6px;
+    border: 1px solid rgba(191, 235, 245, 0.15);
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(201, 242, 251, 0.075), rgba(8, 24, 40, 0.08)),
+      rgba(108, 165, 181, 0.055);
+    opacity: 1;
+    text-align: center;
+  }
+
+  .nav-links a::after {
     display: none;
   }
 
@@ -2248,6 +2413,7 @@ body.viewer-fullscreen-open {
   }
 
   .nav-cta {
+    justify-self: end;
     min-height: 40px;
     padding-inline: 13px;
     font-size: 0.86rem;
@@ -2322,17 +2488,21 @@ body.viewer-fullscreen-open {
   }
 
   .view360-cockpit .scene-strip {
-    top: clamp(220px, 34vh, 310px);
-    left: auto;
+    top: auto;
+    left: 16px;
     right: 16px;
-    width: 96px;
-    max-height: min(44svh, 360px);
-    grid-template-columns: 1fr;
+    bottom: calc(178px + env(safe-area-inset-bottom));
+    width: auto;
+    max-height: none;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .view360-cockpit .viewer-topline {
     top: auto;
-    bottom: 144px;
+    bottom: calc(154px + env(safe-area-inset-bottom));
   }
 
   .view360-cockpit .view360-stats {
@@ -2341,6 +2511,17 @@ body.viewer-fullscreen-open {
 
   .view360-cockpit .scene-caption,
   .view360-cockpit .drag-hint {
+    display: none;
+  }
+
+  .view360-cockpit .scene-strip button {
+    min-width: 0;
+    place-items: center;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .view360-cockpit .scene-strip img {
     display: none;
   }
 
@@ -2444,7 +2625,7 @@ body.viewer-fullscreen-open {
     right: auto;
     width: min(calc(100vw - 22px), 430px);
     min-height: auto;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 9px;
     padding: 9px;
     border-radius: 28px;
@@ -2466,7 +2647,14 @@ body.viewer-fullscreen-open {
   .view360-page-shell .topbar {
     top: 10px;
     bottom: auto;
-    width: min(calc(100vw - 20px), 430px);
+    left: 10px;
+    right: auto;
+    width: calc(100vw - 20px);
+    transform: none;
+  }
+
+  .view360-page-shell .topbar-is-compact {
+    transform: none;
   }
 
   .brand,
@@ -2483,12 +2671,18 @@ body.viewer-fullscreen-open {
     font-size: 0.78rem;
   }
 
+  .nav-menu-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
   .nav-links {
     grid-column: 1 / -1;
-    display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
+    gap: 5px;
     width: 100%;
+    max-height: min(44svh, 300px);
+    padding: 7px;
     font-size: clamp(0.52rem, 2.05vw, 0.66rem);
     line-height: 1.1;
   }
@@ -2497,44 +2691,69 @@ body.viewer-fullscreen-open {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  .view360-page-shell .view360-route-nav:not(.topbar-is-menu-open) .nav-links {
+    display: none;
+  }
+
   .view360-cockpit .view360-copy {
-    top: 110px;
-    padding: 14px;
-    border-radius: 22px;
+    top: 74px;
+    left: 10px;
+    right: 10px;
+    padding: 10px 11px 12px;
+    border-radius: 18px;
   }
 
   .view360-cockpit .view360-copy h1 {
-    font-size: clamp(2.25rem, 13vw, 3.8rem);
+    max-width: none;
+    font-size: clamp(1.72rem, 8.4vw, 2.35rem);
+    line-height: 0.94;
+  }
+
+  .view360-cockpit .view360-copy .eyebrow {
+    max-width: 100%;
+    padding: 6px 9px;
+    font-size: clamp(0.56rem, 2.15vw, 0.66rem);
+    letter-spacing: 0.14em;
+    line-height: 1.18;
   }
 
   .view360-cockpit .viewer-controls {
-    bottom: 104px;
+    bottom: calc(92px + env(safe-area-inset-bottom));
     width: calc(100vw - 20px);
     padding: 8px;
   }
 
   .view360-cockpit .viewer-topline {
-    bottom: 166px;
+    bottom: calc(160px + env(safe-area-inset-bottom));
     padding: 10px;
     border-radius: 18px;
   }
 
   .view360-cockpit .scene-strip {
     top: auto;
-    left: auto;
+    left: 10px;
     right: 10px;
-    bottom: 228px;
-    width: 74px;
-    max-height: 178px;
-    grid-template-columns: 1fr;
-    overflow-y: auto;
+    bottom: calc(166px + env(safe-area-inset-bottom));
+    width: auto;
+    max-height: none;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    overflow-x: hidden;
+    overflow-y: hidden;
     border-radius: 20px;
   }
 
   .view360-cockpit .scene-strip button {
+    gap: 0;
+    padding: 6px 3px;
     min-width: 0;
     place-items: center;
     text-align: center;
+  }
+
+  .view360-cockpit .scene-strip span {
+    font-size: clamp(0.48rem, 1.75vw, 0.56rem);
+    letter-spacing: 0;
   }
 
   .view360-cockpit .scene-strip img {
@@ -2542,17 +2761,9 @@ body.viewer-fullscreen-open {
   }
 
   .nav-links a {
-    display: grid;
     min-height: 34px;
     place-items: center;
     padding: 0 4px;
-    border: 1px solid rgba(191, 235, 245, 0.15);
-    border-radius: 999px;
-    background:
-      linear-gradient(180deg, rgba(201, 242, 251, 0.075), rgba(8, 24, 40, 0.08)),
-      rgba(108, 165, 181, 0.055);
-    opacity: 1;
-    text-align: center;
   }
 
   .nav-links a::after {

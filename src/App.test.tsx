@@ -110,16 +110,46 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByRole('heading', { name: /Validated in the Water/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /Object Detection Results/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /Aligned with SDG 3 and SDG 11/i })).toBeInTheDocument()
+    expect(screen.getByAltText(/Open ALIVE electronics bay/i)).toHaveAttribute(
+      'src',
+      '/alive/drive-sections/documentation-testing/uji-coba-1/documentation-testing-014-20250909-163753.jpg',
+    )
+    expect(screen.getByText(/Internal electronics bay/i)).toBeInTheDocument()
   })
 
   it('keeps a comfortable mobile layout for navigation and the 360 viewer', () => {
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)/)
     expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*bottom:\s*14px/)
-    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*display:\s*grid[\s\S]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/)
+    expect(cssText).toMatch(/\.nav-menu-toggle\s*\{[\s\S]*display:\s*grid/)
+    expect(cssText).toMatch(/\.topbar-is-menu-open\s+\.nav-links\s*\{[\s\S]*display:\s*grid/)
+    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)[\s\S]*max-height:\s*min\(44svh,\s*300px\)/)
     expect(cssText).toMatch(/\.site-shell\s*\{[\s\S]*padding-bottom:\s*172px/)
     expect(cssText).toMatch(/scroll-padding-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
     expect(cssText).toMatch(/\.panorama-window\s*\{[\s\S]*min-height:\s*clamp\(240px,\s*68vw,\s*330px\)/)
     expect(cssText).toMatch(/\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)[\s\S]*scroll-margin-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
+  })
+
+  it('keeps mobile navbar links behind a toggleable menu state', () => {
+    render(<App />)
+
+    const nav = screen.getByRole('navigation', { name: /Primary navigation/i })
+    const toggle = nav.querySelector<HTMLButtonElement>('.nav-menu-toggle')
+
+    expect(toggle).not.toBeNull()
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(nav).toHaveClass('topbar-is-menu-closed')
+
+    fireEvent.click(toggle!)
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(nav).toHaveClass('topbar-is-menu-open')
+
+    const designLink = within(nav).getByRole('link', { name: /^Design$/i })
+    designLink.addEventListener('click', (event) => event.preventDefault(), { once: true })
+    fireEvent.click(designLink)
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(nav).toHaveClass('topbar-is-menu-closed')
   })
 
   it('renders the project showcase metrics from the Drive assets', () => {
@@ -305,7 +335,9 @@ describe('ALIVE project showcase', () => {
     )
     expect(screen.getByRole('link', { name: /Homepage/i })).toHaveAttribute('href', '/')
     expect(screen.queryByRole('button', { name: /enter fullscreen 360 viewer/i })).not.toBeInTheDocument()
-    expect(screen.getByText(/Fullscreen page/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Fullscreen page/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/ALIVE \/ BOAT 360/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Drag to explore the real 360° scene/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/without triggering browser fullscreen overlays/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Open 360° source folder/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /Smart Lifeboat Based on Object Detection/i })).not.toBeInTheDocument()
@@ -317,12 +349,19 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.view360-cockpit\s+\.panorama-window\s*\{[\s\S]*height:\s*100svh/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*position:\s*fixed/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*position:\s*fixed/)
+    expect(cssText).toMatch(/\.view360-cockpit\s*\{[\s\S]*--cockpit-top:\s*clamp\(128px,\s*15svh,\s*156px\)/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy\s*\{[\s\S]*width:\s*min\(280px,\s*calc\(100vw - 36px\)\)/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*font-size:\s*clamp\(1\.8rem,\s*2\.9vw,\s*3\.2rem\)/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*top:\s*clamp\(230px,\s*27vh,\s*310px\)[\s\S]*right:\s*clamp\(18px,\s*3vw,\s*48px\)[\s\S]*bottom:\s*auto/)
-    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*width:\s*112px[\s\S]*grid-template-columns:\s*1fr/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*top:\s*calc\(var\(--cockpit-top\) \+ 106px\)[\s\S]*bottom:\s*calc\(var\(--cockpit-info-bottom\) \+ 8px\)/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*width:\s*var\(--cockpit-scene-rail\)[\s\S]*grid-template-columns:\s*1fr/)
+    expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-caption\s*\{[\s\S]*right:\s*calc\(var\(--cockpit-edge\) \+ var\(--cockpit-scene-rail\) \+ var\(--cockpit-scene-gap\)\)/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip img\s*\{[\s\S]*max-height:\s*48px/)
-    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*right:\s*10px[\s\S]*bottom:\s*228px[\s\S]*width:\s*74px[\s\S]*grid-template-columns:\s*1fr/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*740px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)[\s\S]*overflow-x:\s*hidden/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-page-shell\s+\.view360-route-nav:not\(\.topbar-is-menu-open\)\s+\.nav-links\s*\{[\s\S]*display:\s*none/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*max-width:\s*none[\s\S]*font-size:\s*clamp\(1\.72rem,\s*8\.4vw,\s*2\.35rem\)/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.view360-copy \.eyebrow\s*\{[\s\S]*font-size:\s*clamp\(0\.56rem,\s*2\.15vw,\s*0\.66rem\)/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*10px[\s\S]*bottom:\s*calc\(166px \+ env\(safe-area-inset-bottom\)\)[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip span\s*\{[\s\S]*font-size:\s*clamp\(0\.48rem,\s*1\.75vw,\s*0\.56rem\)/)
   })
 
   it('does not invoke native browser fullscreen from the dedicated 360 route', async () => {

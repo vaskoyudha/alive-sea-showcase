@@ -21,11 +21,16 @@ type SiteNavProps = {
   className?: string
 }
 
-export function ShowcaseNavLinks() {
+type ShowcaseNavLinksProps = {
+  id?: string
+  onNavigate?: () => void
+}
+
+export function ShowcaseNavLinks({ id, onNavigate }: ShowcaseNavLinksProps) {
   return (
-    <div className="nav-links nav-links-showcase">
+    <div className="nav-links nav-links-showcase" id={id}>
       {showcaseNavLinks.map((item) => (
-        <a href={item.href} key={item.href}>
+        <a href={item.href} key={item.href} onClick={onNavigate}>
           <Icon name={item.icon} />
           <span>{item.label}</span>
         </a>
@@ -36,6 +41,7 @@ export function ShowcaseNavLinks() {
 
 export function SiteNav({ ariaLabel, logoSrc, sourceDriveUrl, brandHref = '/', className = '' }: SiteNavProps) {
   const [isCompact, setIsCompact] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
     let frame = 0
@@ -64,17 +70,30 @@ export function SiteNav({ ariaLabel, logoSrc, sourceDriveUrl, brandHref = '/', c
   }, [])
 
   const stateClass = isCompact ? 'topbar-is-compact' : 'topbar-is-expanded'
+  const menuStateClass = isMenuOpen ? 'topbar-is-menu-open' : 'topbar-is-menu-closed'
 
   return (
-    <nav className={['topbar', stateClass, className].filter(Boolean).join(' ')} aria-label={ariaLabel}>
-      <a className="brand" href={brandHref} aria-label="ALIVE home">
+    <nav className={['topbar', stateClass, menuStateClass, className].filter(Boolean).join(' ')} aria-label={ariaLabel}>
+      <a className="brand" href={brandHref} aria-label="ALIVE home" onClick={() => setIsMenuOpen(false)}>
         <img src={logoSrc} alt="ALIVE logo" width={224} height={92} fetchPriority="high" />
       </a>
-      <ShowcaseNavLinks />
-      <a className="nav-cta" href={sourceDriveUrl} target="_blank" rel="noreferrer">
+      <ShowcaseNavLinks id="showcase-nav-links" onNavigate={() => setIsMenuOpen(false)} />
+      <a className="nav-cta" href={sourceDriveUrl} target="_blank" rel="noreferrer" onClick={() => setIsMenuOpen(false)}>
         <Icon name="external" />
         <span>Source Drive</span>
       </a>
+      <button
+        type="button"
+        className="nav-menu-toggle"
+        aria-controls="showcase-nav-links"
+        aria-expanded={isMenuOpen}
+        aria-label={isMenuOpen ? 'Close mobile navigation menu' : 'Open mobile navigation menu'}
+        onClick={() => setIsMenuOpen((current) => !current)}
+      >
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </button>
     </nav>
   )
 }

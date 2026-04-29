@@ -71,7 +71,11 @@ const galleryImages = [
   },
 ]
 
+const electronicsBayImage =
+  '/alive/drive-sections/documentation-testing/uji-coba-1/documentation-testing-014-20250909-163753.jpg'
+
 const deepDiveAsset = (fileName: string) => asset(`deep-dive/${fileName}`)
+const evidenceAsset = (fileName: string) => (fileName.startsWith('/') ? fileName : deepDiveAsset(fileName))
 
 const projectFacts = [
   { label: 'Research window', value: '5 months', detail: 'November 2025 to March 2026' },
@@ -120,6 +124,12 @@ const deepDiveEvidence = [
     alt: 'Students assembling ALIVE electronics and wiring on the prototype deck',
     label: 'Electronics assembly',
     detail: 'The prototype was assembled and checked manually, including wiring, battery, receiver, and deck modules.',
+  },
+  {
+    src: electronicsBayImage,
+    alt: 'Open ALIVE electronics bay showing the Raspberry Pi case, battery connector, receiver, ESC wiring, and prototype control compartment',
+    label: 'Internal electronics bay',
+    detail: 'Open hull view showing the compute case, receiver, ESC wiring, and battery connector used during field preparation.',
   },
   {
     src: 'water-deployment.webp',
@@ -378,6 +388,7 @@ function View360({ variant = 'section' }: View360Props) {
       className={`section view360-section${isFocusVariant ? ' view360-section-focus view360-cockpit' : ''}`}
       id="view360"
       aria-labelledby="view360-title"
+      data-backdrop-text={isFocusVariant ? undefined : '360 VIEW'}
     >
       <div className="view360-copy">
         <p className="eyebrow">
@@ -411,13 +422,11 @@ function View360({ variant = 'section' }: View360Props) {
       </div>
 
       <div className={`viewer-shell${isFullscreen ? ' viewer-shell-fullscreen' : ''}`} ref={viewerShellRef}>
-        <div className="viewer-topline">
-          <span>ALIVE / BOAT 360</span>
-          <div className="viewer-topline-actions">
-            <strong>{activeScene.label}</strong>
-            {isFocusVariant ? (
-              <span className="cockpit-mode">Fullscreen page</span>
-            ) : (
+        {!isFocusVariant && (
+          <div className="viewer-topline">
+            <span>ALIVE / BOAT 360</span>
+            <div className="viewer-topline-actions">
+              <strong>{activeScene.label}</strong>
               <button
                 type="button"
                 className="fullscreen-toggle"
@@ -427,9 +436,9 @@ function View360({ variant = 'section' }: View360Props) {
               >
                 {isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
               </button>
-            )}
+            </div>
           </div>
-        </div>
+        )}
         <div
           className="panorama-window photo-sphere-window"
           data-testid="boat-photo-sphere-viewer"
@@ -440,7 +449,7 @@ function View360({ variant = 'section' }: View360Props) {
           <div ref={photoSphereRef} className="photo-sphere-mount" />
           <div className="viewer-glass" aria-hidden="true" />
           <div className="viewer-reticle" aria-hidden="true" />
-          <div className="drag-hint">Drag to explore the real 360° scene</div>
+          {!isFocusVariant && <div className="drag-hint">Drag to explore the real 360° scene</div>}
           <div className="scene-caption">
             <span>{activeScene.detail}</span>
             <small>{Math.round(bearing)}° camera heading</small>
@@ -494,7 +503,12 @@ function View360Page() {
 
 function ProjectDeepDive() {
   return (
-    <section className="section deep-dive-section" id="deep-dive" aria-labelledby="deep-dive-title">
+    <section
+      className="section deep-dive-section"
+      id="deep-dive"
+      aria-labelledby="deep-dive-title"
+      data-backdrop-text="DOSSIER"
+    >
       <div className="deep-dive-hero">
         <div className="deep-dive-copy">
           <p className="eyebrow">Project dossier · showcase analysis</p>
@@ -575,13 +589,13 @@ function ProjectDeepDive() {
           <h3 id="evidence-wall-title">What the project shows visually</h3>
           <p>
             The visual sequence shows the full project story: poster research framing, CAD-style design, student assembly,
-            dockside preparation, water deployment, and stopwatch timing for functional performance.
+            internal electronics, dockside preparation, water deployment, and stopwatch timing for functional performance.
           </p>
         </div>
         <div className="evidence-wall-grid">
           {deepDiveEvidence.map((item) => (
-            <figure key={item.src}>
-              <img src={deepDiveAsset(item.src)} alt={item.alt} loading="lazy" />
+            <figure className={item.src === electronicsBayImage ? 'evidence-wall-electronics' : undefined} key={item.src}>
+              <img src={evidenceAsset(item.src)} alt={item.alt} loading="lazy" />
               <figcaption>
                 <strong>{item.label}</strong>
                 {item.detail}
@@ -754,7 +768,7 @@ function ShowcasePage() {
         ))}
       </section>
 
-      <section className="section split-section" id="system">
+      <section className="section split-section" id="system" data-backdrop-text="SYSTEM">
         <div className="section-copy">
           <p className="eyebrow">System architecture</p>
           <h2>How ALIVE Works</h2>
@@ -774,7 +788,7 @@ function ShowcasePage() {
         </div>
       </section>
 
-      <section className="design-board" aria-label="ALIVE design views">
+      <section className="design-board" aria-label="ALIVE design views" data-backdrop-text="DESIGN">
         <div className="board-header">
           <p className="eyebrow">Industrial design language</p>
           <h2>Sea-ready shape, rescue-grade visibility.</h2>
@@ -803,7 +817,7 @@ function ShowcasePage() {
 
       <View360 />
 
-      <section className="section testing-section" id="testing">
+      <section className="section testing-section" id="testing" data-backdrop-text="TESTED">
         <div className="section-heading center-heading">
           <p className="eyebrow">Prototype proof</p>
           <h2>Validated in the Water</h2>
@@ -832,7 +846,7 @@ function ShowcasePage() {
         </div>
       </section>
 
-      <section className="section vision-section" id="vision">
+      <section className="section vision-section" id="vision" data-backdrop-text="VISION">
         <div className="vision-copy">
           <p className="eyebrow">Detection model showcase</p>
           <h2>Object Detection Results</h2>
@@ -859,7 +873,7 @@ function ShowcasePage() {
         </div>
       </section>
 
-      <section className="section impact-section" id="impact">
+      <section className="section impact-section" id="impact" data-backdrop-text="IMPACT">
         <div className="poster-card">
           <img src={asset('poster.webp')} alt="ALIVE competition poster with research methodology and findings" width={900} height={1300} loading="lazy" />
         </div>
@@ -885,7 +899,7 @@ function ShowcasePage() {
         </div>
       </section>
 
-      <section className="team-section" aria-label="ALIVE team and prototype">
+      <section className="team-section" aria-label="ALIVE team and prototype" data-backdrop-text="TEAM">
         <img src={asset('team.webp')} alt="ALIVE student team with prototype beside the water" width={1200} height={900} loading="lazy" />
         <div>
           <p className="eyebrow">Built by young innovators</p>
