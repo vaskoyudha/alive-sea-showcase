@@ -1,14 +1,16 @@
 import { act } from 'react'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 import cssText from './App.css?raw'
+import { aliveMedia, aliveMediaTotals, aliveSections, getSectionByPath } from './data/aliveMedia'
 import vercelConfigText from '../vercel.json?raw'
 import './setupTests'
 
 describe('ALIVE project showcase', () => {
   afterEach(() => {
     vi.restoreAllMocks()
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 })
     window.history.pushState({}, '', '/')
   })
 
@@ -18,7 +20,7 @@ describe('ALIVE project showcase', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /ALIVE: Advanced Lifeboat for Flood Evacuation/i,
+        name: /ALIVE \(Advanced Lifeboat for Flood Evacuation\): Smart Lifeboat Based on Object Detection for Flood Evacuation/i,
       }),
     ).toBeInTheDocument()
     expect(screen.getByText(/Faster Evacuation, More Lives Safely/i)).toBeInTheDocument()
@@ -29,15 +31,76 @@ describe('ALIVE project showcase', () => {
     render(<App />)
 
     const nav = screen.getByRole('navigation', { name: /Primary navigation/i })
-    expect(within(nav).getByRole('link', { name: /System/i })).toBeInTheDocument()
-    expect(within(nav).getByRole('link', { name: /View 360/i })).toBeInTheDocument()
-    expect(within(nav).getByRole('link', { name: /Testing/i })).toBeInTheDocument()
-    expect(within(nav).getByRole('link', { name: /Impact/i })).toBeInTheDocument()
-    expect(within(nav).getByRole('link', { name: /Deep Dive/i })).toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: /Homepage/i })).toHaveAttribute('href', '/')
+    expect(within(nav).getByRole('link', { name: /^Design$/i })).toHaveAttribute('href', '/sections/design')
+    expect(within(nav).getByRole('link', { name: /^Field$/i })).toHaveAttribute(
+      'href',
+      '/sections/documentation-testing',
+    )
+    expect(within(nav).getByRole('link', { name: /^Vision AI$/i })).toHaveAttribute(
+      'href',
+      '/sections/object-detection',
+    )
+    expect(within(nav).getByRole('link', { name: /^Performance$/i })).toHaveAttribute(
+      'href',
+      '/sections/functional-testing',
+    )
+    expect(within(nav).getByRole('link', { name: /^Safety$/i })).toHaveAttribute('href', '/sections/basic-safety')
+    expect(within(nav).getByRole('link', { name: /^360$/i })).toHaveAttribute('href', '/view-360')
 
     expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*position:\s*fixed/)
-    expect(cssText).toMatch(/backdrop-filter:\s*blur\(28px\)\s*saturate\(1\.8\)/)
+    expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*top:\s*0/)
+    expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*width:\s*100%/)
+    expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*border-radius:\s*0\s*0\s*28px\s*28px/)
+    expect(cssText).toMatch(/backdrop-filter:\s*blur\(28px\)\s*saturate\(1\.55\)/)
+    expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*inset\s+0\s+1px\s+0\s+rgba\(205,\s*245,\s*255,\s*0\.16\)/)
+    expect(cssText).toMatch(/\.topbar-is-compact\s*\{[\s\S]*width:\s*min\(calc\(100vw - 64px\),\s*1080px\)/)
+    expect(cssText).toMatch(/\.topbar-is-compact\s*\{[\s\S]*border-radius:\s*999px/)
+    expect(cssText).not.toMatch(/nav-float-toggle/)
+    expect(cssText).not.toMatch(/topbar-is-floating-open/)
     expect(cssText).toMatch(/scroll-margin-top:\s*156px/)
+  })
+
+  it('turns the navbar into a floating pill after the first few pixels of scroll', async () => {
+    render(<App />)
+
+    const nav = screen.getByRole('navigation', { name: /Primary navigation/i })
+    const expandedZone = document.querySelector<HTMLElement>('[data-nav-expanded-zone]')
+
+    expect(nav).toHaveClass('topbar-is-expanded')
+    expect(expandedZone).not.toBeNull()
+    vi.spyOn(expandedZone!, 'getBoundingClientRect').mockReturnValue({
+      bottom: 900,
+      height: 900,
+      left: 0,
+      right: 1440,
+      top: 0,
+      width: 1440,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    })
+
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 4 })
+    fireEvent.scroll(window)
+
+    await waitFor(() => expect(nav).toHaveClass('topbar-is-compact'))
+  })
+
+  it('exposes every single showcase page directly from the primary navbar', () => {
+    render(<App />)
+
+    const nav = screen.getByRole('navigation', { name: /Primary navigation/i })
+    const hasNavLink = (name: RegExp, href: string) =>
+      within(nav).getAllByRole('link', { name }).some((link) => link.getAttribute('href') === href)
+
+    expect(hasNavLink(/Homepage/i, '/')).toBe(true)
+    expect(hasNavLink(/^Design$/i, '/sections/design')).toBe(true)
+    expect(hasNavLink(/^Field$/i, '/sections/documentation-testing')).toBe(true)
+    expect(hasNavLink(/^Vision AI$/i, '/sections/object-detection')).toBe(true)
+    expect(hasNavLink(/Performance/i, '/sections/functional-testing')).toBe(true)
+    expect(hasNavLink(/^Safety$/i, '/sections/basic-safety')).toBe(true)
+    expect(hasNavLink(/360/i, '/view-360')).toBe(true)
   })
 
   it('shows system, testing, vision AI, and impact sections in English', () => {
@@ -52,14 +115,14 @@ describe('ALIVE project showcase', () => {
   it('keeps a comfortable mobile layout for navigation and the 360 viewer', () => {
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)/)
     expect(cssText).toMatch(/\.topbar\s*\{[\s\S]*bottom:\s*14px/)
-    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*display:\s*grid[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)/)
+    expect(cssText).toMatch(/\.nav-links\s*\{[\s\S]*display:\s*grid[\s\S]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/)
     expect(cssText).toMatch(/\.site-shell\s*\{[\s\S]*padding-bottom:\s*172px/)
     expect(cssText).toMatch(/scroll-padding-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
     expect(cssText).toMatch(/\.panorama-window\s*\{[\s\S]*min-height:\s*clamp\(240px,\s*68vw,\s*330px\)/)
     expect(cssText).toMatch(/\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)[\s\S]*scroll-margin-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
   })
 
-  it('renders the project evidence metrics from the Drive assets', () => {
+  it('renders the project showcase metrics from the Drive assets', () => {
     render(<App />)
 
     const metrics = screen.getByTestId('evidence-metrics')
@@ -69,7 +132,7 @@ describe('ALIVE project showcase', () => {
     expect(within(metrics).getByText(/mAP50-95/i)).toBeInTheDocument()
   })
 
-  it('adds a deep dive page with analyzed project evidence', () => {
+  it('adds a deep dive page with analyzed project showcase context', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: /Project Deep Dive/i })).toBeInTheDocument()
@@ -80,10 +143,108 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByText(/wide-angle or thermal cameras/i)).toBeInTheDocument()
   })
 
+  it('defines a complete Drive media manifest for the detail pages', () => {
+    const uniqueSources = new Set(aliveMedia.map((item) => item.src))
+    const uniqueSourcePaths = new Set(aliveMedia.map((item) => item.sourcePath))
+
+    expect(aliveMediaTotals.total).toBe(100)
+    expect(aliveMediaTotals.images).toBe(89)
+    expect(aliveMediaTotals.videos).toBe(11)
+    expect(uniqueSources.size).toBe(100)
+    expect(uniqueSourcePaths.size).toBe(100)
+    expect(getSectionByPath('/sections/design')?.id).toBe('design')
+    expect(aliveSections.find((section) => section.id === 'documentation-testing')?.mediaCount).toBe(77)
+  })
+
+  it('adds homepage buttons that route into the Drive section detail pages', () => {
+    render(<App />)
+
+    expect(screen.getByRole('link', { name: /Browse showcase pages/i })).toHaveAttribute('href', '/sections/evidence')
+    expect(screen.getByRole('link', { name: /View design details/i })).toHaveAttribute('href', '/sections/design')
+    expect(screen.getByRole('link', { name: /View testing details/i })).toHaveAttribute(
+      'href',
+      '/sections/documentation-testing',
+    )
+    expect(screen.getByRole('link', { name: /View AI testing/i })).toHaveAttribute(
+      'href',
+      '/sections/object-detection',
+    )
+    expect(screen.getAllByRole('link', { name: /View speed results/i })[0]).toHaveAttribute(
+      'href',
+      '/sections/functional-testing',
+    )
+    expect(screen.getByRole('link', { name: /View safety results/i })).toHaveAttribute(
+      'href',
+      '/sections/basic-safety',
+    )
+    expect(screen.getByRole('link', { name: /Open full 360 page/i })).toHaveAttribute('href', '/view-360')
+  })
+
+  it('renders each Drive section detail route with explanatory copy and media counts', () => {
+    const routes = [
+      { path: '/sections/design', heading: /ALIVE Design System/i, count: '6' },
+      { path: '/sections/documentation-testing', heading: /Field Testing Showcase/i, count: '77' },
+      { path: '/sections/object-detection', heading: /Vision AI Testing Showcase/i, count: '2' },
+      { path: '/sections/functional-testing', heading: /Performance Testing Showcase/i, count: '5' },
+      { path: '/sections/basic-safety', heading: /Safety Validation Showcase/i, count: '4' },
+    ]
+
+    for (const route of routes) {
+      window.history.pushState({}, '', route.path)
+      const { unmount } = render(<App />)
+
+      expect(screen.getByRole('heading', { level: 1, name: route.heading })).toBeInTheDocument()
+      expect(screen.getAllByText(route.count).length).toBeGreaterThan(0)
+      expect(screen.getAllByText(/Showcase focus/i).length).toBeGreaterThan(0)
+      expect(screen.getByText(/What to look for/i)).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /Homepage/i })).toHaveAttribute('href', '/')
+
+      unmount()
+    }
+  }, 15_000)
+
+  it('renders the documentation testing route with all five Uji Coba groups', () => {
+    window.history.pushState({}, '', '/sections/documentation-testing')
+
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: 'Uji Coba 1' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Uji Coba 2' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Uji Coba 3' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Uji Coba 4' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Uji Coba 5' })).toBeInTheDocument()
+  })
+
+  it('renders object-detection videos with controls on the detail route', () => {
+    window.history.pushState({}, '', '/sections/object-detection')
+
+    const { container } = render(<App />)
+
+    expect(container.querySelectorAll('video[controls]').length).toBe(2)
+    expect(screen.getByText(/runtime behavior/i)).toBeInTheDocument()
+  })
+
+  it('renders a showcase index for all Drive section pages', () => {
+    window.history.pushState({}, '', '/sections/evidence')
+
+    render(<App />)
+
+    expect(screen.getByRole('heading', { level: 1, name: /ALIVE Showcase Collection/i })).toBeInTheDocument()
+    expect(screen.getByText('100')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /View safety results/i })).toHaveAttribute('href', '/sections/basic-safety')
+    expect(screen.getByRole('link', { name: /Explore 360/i })).toHaveAttribute('href', '/view-360')
+  })
+
+  it('styles detail page media to show whole images without forced cropping', () => {
+    expect(cssText).toMatch(/\.section-media-frame img,\s*\.section-media-frame video\s*\{[\s\S]*object-fit:\s*contain/)
+    expect(cssText).toMatch(/\.section-media-frame\s*\{[\s\S]*aspect-ratio:\s*4\s*\/\s*3/)
+    expect(cssText).toMatch(/\.section-media-card-video \.section-media-frame\s*\{[\s\S]*aspect-ratio:\s*16\s*\/\s*9/)
+  })
+
   it('adds a real Photo Sphere 360 viewer from the Drive panorama folder', () => {
     render(<App />)
 
-    expect(screen.getByRole('link', { name: /View 360/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^360$/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /360° Product View/i })).toBeInTheDocument()
     expect(screen.getByTestId('boat-photo-sphere-viewer')).toHaveAttribute(
       'data-panorama-src',
@@ -142,12 +303,12 @@ describe('ALIVE project showcase', () => {
       'data-panorama-src',
       '/alive/360/scene-01.webp',
     )
-    expect(screen.getByRole('link', { name: /Back to showcase/i })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: /Homepage/i })).toHaveAttribute('href', '/')
     expect(screen.queryByRole('button', { name: /enter fullscreen 360 viewer/i })).not.toBeInTheDocument()
     expect(screen.getByText(/Fullscreen page/i)).toBeInTheDocument()
     expect(screen.queryByText(/without triggering browser fullscreen overlays/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Open 360° source folder/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: /ALIVE: Advanced Lifeboat/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /Smart Lifeboat Based on Object Detection/i })).not.toBeInTheDocument()
   })
 
   it('styles the dedicated 360 route as a fullscreen cockpit', () => {

@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Viewer } from '@photo-sphere-viewer/core'
 import '@photo-sphere-viewer/core/index.css'
+import { EvidenceIndexPage } from './components/EvidenceIndexPage'
+import { Icon } from './components/Icon'
+import { SectionDetailPage } from './components/SectionDetailPage'
+import { SiteNav } from './components/SiteNav'
+import { getSectionByPath } from './data/aliveMedia'
 import './App.css'
 
 const driveUrl = 'https://drive.google.com/drive/folders/1vshOZCRxXkgY5Yj5CDcST13iDoHaBT_-'
@@ -26,7 +31,7 @@ const evidenceMetrics = [
   {
     value: '5+',
     label: 'field test sets',
-    detail: 'prototype, safety, speed, responsiveness, and vision evidence',
+    detail: 'prototype, safety, speed, responsiveness, and vision showcase material',
   },
 ]
 
@@ -57,7 +62,7 @@ const galleryImages = [
   {
     src: 'water-drone.webp',
     alt: 'Aerial view of the orange ALIVE prototype floating on water',
-    caption: 'Drone-perspective water deployment evidence.',
+    caption: 'Drone-perspective water deployment showcase.',
   },
   {
     src: 'sensor-closeup.webp',
@@ -126,7 +131,7 @@ const deepDiveEvidence = [
     src: 'speed-timing.webp',
     alt: 'Stopwatch screenshot showing speed testing time for the ALIVE prototype',
     label: 'Speed timing',
-    detail: 'Stopwatch evidence supports the measured 20-meter travel time and speed result.',
+    detail: 'Stopwatch capture supports the measured 20-meter travel time and speed result.',
   },
 ]
 
@@ -139,7 +144,7 @@ const performanceResults = [
 ]
 
 const visionModels = [
-  { name: 'YOLOv11n 640x640', role: 'Peak mAP evidence', detail: 'Used as the strongest accuracy benchmark in the poster comparison.' },
+  { name: 'YOLOv11n 640x640', role: 'Peak mAP benchmark', detail: 'Used as the strongest accuracy benchmark in the poster comparison.' },
   { name: 'YOLOv8n 640x640', role: 'Selected balance', detail: 'Presented as the best accuracy/speed balance for Raspberry Pi 4 deployment.' },
   { name: 'YOLOv8n 240x120', role: 'Speed variant', detail: 'Lower-resolution comparison for lightweight FPS testing.' },
 ]
@@ -196,8 +201,8 @@ const panoramaScenes = [
     src: '360/scene-05.webp',
     thumb: '360/thumb-05.webp',
     label: 'Scene 05',
-    detail: 'Open-air field evidence',
-    alt: 'Interactive 360 degree view of the ALIVE field evidence panorama',
+    detail: 'Open-air field showcase',
+    alt: 'Interactive 360 degree view of the ALIVE field panorama',
   },
   {
     src: '360/scene-06.webp',
@@ -376,7 +381,7 @@ function View360({ variant = 'section' }: View360Props) {
     >
       <div className="view360-copy">
         <p className="eyebrow">
-          {isFocusVariant ? 'Live route · fullscreen rescue cockpit' : 'Immersive evidence · Photo Sphere boat viewer'}
+          {isFocusVariant ? 'Live route · fullscreen rescue cockpit' : 'Immersive showcase · Photo Sphere boat viewer'}
         </p>
         {isFocusVariant ? <h1 id="view360-title">360° Command View</h1> : <h2 id="view360-title">360° Product View</h2>}
         {!isFocusVariant && (
@@ -392,9 +397,16 @@ function View360({ variant = 'section' }: View360Props) {
           <span>True drag-to-rotate 360°</span>
         </div>
         {!isFocusVariant && (
-          <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
-            Open 360° source folder
-          </a>
+          <div className="section-actions view360-actions">
+            <a className="button button-primary" href="/view-360">
+              <Icon name="compass" />
+              Open full 360 page
+            </a>
+            <a className="button button-ghost view360-source" href={panoramaDriveUrl} target="_blank" rel="noreferrer">
+              <Icon name="external" />
+              Open 360° source folder
+            </a>
+          </div>
         )}
       </div>
 
@@ -469,20 +481,12 @@ function View360({ variant = 'section' }: View360Props) {
 function View360Page() {
   return (
     <main className="site-shell view360-page-shell">
-      <nav className="topbar view360-route-nav" aria-label="360 page navigation">
-        <a className="brand" href="/" aria-label="ALIVE home">
-          <img src={asset('logo.png')} alt="ALIVE logo" width={224} height={92} fetchPriority="high" />
-        </a>
-        <div className="nav-links">
-          <a href="/">Back to showcase</a>
-          <a href={panoramaDriveUrl} target="_blank" rel="noreferrer">
-            Source panoramas
-          </a>
-        </div>
-        <a className="nav-cta" href={driveUrl} target="_blank" rel="noreferrer">
-          Source Drive
-        </a>
-      </nav>
+      <SiteNav
+        ariaLabel="360 page navigation"
+        className="view360-route-nav"
+        logoSrc={asset('logo.png')}
+        sourceDriveUrl={driveUrl}
+      />
       <View360 variant="focus" />
     </main>
   )
@@ -493,13 +497,19 @@ function ProjectDeepDive() {
     <section className="section deep-dive-section" id="deep-dive" aria-labelledby="deep-dive-title">
       <div className="deep-dive-hero">
         <div className="deep-dive-copy">
-          <p className="eyebrow">Project dossier · research evidence analysis</p>
+          <p className="eyebrow">Project dossier · showcase analysis</p>
           <h2 id="deep-dive-title">Project Deep Dive</h2>
           <p>
             The source folder shows ALIVE as a complete student research project: a problem statement, engineering
             design process, physical build, repeated water testing, object-detection validation, safety checks, and
-            future recommendations. This page turns that poster and image evidence into an interactive field dossier.
+            future recommendations. This page turns the project material into an interactive field dossier.
           </p>
+          <div className="section-actions">
+            <a className="button button-ghost" href="/sections/evidence">
+              <Icon name="archive" />
+              Browse all showcase pages
+            </a>
+          </div>
         </div>
         <div className="brief-grid" aria-label="Project research facts">
           {projectFacts.map((fact) => (
@@ -561,10 +571,10 @@ function ProjectDeepDive() {
 
       <section className="deep-dive-panel evidence-wall" aria-labelledby="evidence-wall-title">
         <div className="section-heading center-heading">
-          <p className="eyebrow">Image evidence analysis</p>
-          <h3 id="evidence-wall-title">What the folder proves visually</h3>
+          <p className="eyebrow">Visual showcase analysis</p>
+          <h3 id="evidence-wall-title">What the project shows visually</h3>
           <p>
-            The images show a full chain of evidence: poster research framing, CAD-style design, student assembly,
+            The visual sequence shows the full project story: poster research framing, CAD-style design, student assembly,
             dockside preparation, water deployment, and stopwatch timing for functional performance.
           </p>
         </div>
@@ -593,6 +603,12 @@ function ProjectDeepDive() {
                 <p>{result.detail}</p>
               </article>
             ))}
+          </div>
+          <div className="section-actions">
+            <a className="button button-ghost" href="/sections/functional-testing">
+              <Icon name="gauge" />
+              View speed results
+            </a>
           </div>
         </section>
 
@@ -623,6 +639,12 @@ function ProjectDeepDive() {
                 <p>{result.detail}</p>
               </article>
             ))}
+          </div>
+          <div className="section-actions">
+            <a className="button button-ghost" href="/sections/basic-safety">
+              <Icon name="shield" />
+              View safety results
+            </a>
           </div>
         </section>
 
@@ -666,39 +688,35 @@ function ProjectDeepDive() {
 function ShowcasePage() {
   return (
     <main className="site-shell">
-      <nav className="topbar" aria-label="Primary navigation">
-        <a className="brand" href="#hero" aria-label="ALIVE home">
-          <img src={asset('logo.png')} alt="ALIVE logo" width={224} height={92} fetchPriority="high" />
-        </a>
-        <div className="nav-links">
-          <a href="#system">System</a>
-          <a href="/view-360">View 360</a>
-          <a href="#testing">Testing</a>
-          <a href="#vision">Vision AI</a>
-          <a href="#impact">Impact</a>
-          <a href="#deep-dive">Deep Dive</a>
-        </div>
-        <a className="nav-cta" href={driveUrl} target="_blank" rel="noreferrer">
-          Source Drive
-        </a>
-      </nav>
+      <SiteNav ariaLabel="Primary navigation" brandHref="#hero" logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
 
-      <section className="hero-section" id="hero">
+      <section className="hero-section" id="hero" data-nav-expanded-zone>
         <div className="hero-copy">
           <p className="eyebrow">Student innovation · flood evacuation · intelligent surface craft</p>
-          <h1>ALIVE: Advanced Lifeboat for Flood Evacuation</h1>
+          <h1 aria-label="ALIVE (Advanced Lifeboat for Flood Evacuation): Smart Lifeboat Based on Object Detection for Flood Evacuation">
+            <span>ALIVE (Advanced Lifeboat for Flood Evacuation):</span>
+            <span className="hero-title-highlight">Smart Lifeboat Based on Object Detection</span>
+            <span>for Flood Evacuation</span>
+          </h1>
           <p className="hero-lede">
             A professional showcase for an object-detection lifeboat prototype built to make
             flood response faster, safer, and more coordinated from the first minutes of an emergency.
           </p>
           <div className="hero-actions">
             <a className="button button-primary" href="/view-360">
+              <Icon name="compass" />
               Explore 360°
             </a>
             <a className="button button-ghost" href="#testing">
+              <Icon name="waves" />
               See validation
             </a>
+            <a className="button button-ghost" href="/sections/evidence">
+              <Icon name="archive" />
+              Browse showcase pages
+            </a>
             <a className="button button-ghost" href="#deep-dive">
+              <Icon name="image" />
               Read deep dive
             </a>
           </div>
@@ -708,14 +726,16 @@ function ShowcasePage() {
         </div>
 
         <div className="hero-visual" aria-label="ALIVE product render over a sea-inspired interface">
-          <div className="sonar-card">
-            <div className="sonar-grid" aria-hidden="true" />
+          <div className="hero-stage">
+            <div className="hero-orbit hero-orbit-large" aria-hidden="true" />
+            <div className="hero-orbit hero-orbit-small" aria-hidden="true" />
+            <div className="hero-beam" aria-hidden="true" />
             <img
               className="hero-product"
-              src={asset('hero-render.webp')}
+              src="/alive/hero-boat-transparent.webp"
               alt="Orange ALIVE smart lifeboat render with twin pontoons"
-              width={1200}
-              height={780}
+              width={1537}
+              height={850}
               fetchPriority="high"
             />
             <div className="status-chip chip-top">Raspberry Pi + Webcam</div>
@@ -758,6 +778,12 @@ function ShowcasePage() {
         <div className="board-header">
           <p className="eyebrow">Industrial design language</p>
           <h2>Sea-ready shape, rescue-grade visibility.</h2>
+          <div className="section-actions">
+            <a className="button button-ghost" href="/sections/design">
+              <Icon name="layers" />
+              View design details
+            </a>
+          </div>
         </div>
         <div className="render-grid">
           <figure className="render-card large-render">
@@ -782,9 +808,19 @@ function ShowcasePage() {
           <p className="eyebrow">Prototype proof</p>
           <h2>Validated in the Water</h2>
           <p>
-            The Drive evidence includes design renders, prototype assembly, water deployment, rescue simulation,
+            The project showcase includes design renders, prototype assembly, water deployment, rescue simulation,
             safety checks, speed and responsiveness testing, and object-detection results.
           </p>
+          <div className="section-actions center-actions">
+            <a className="button button-primary" href="/sections/documentation-testing">
+              <Icon name="waves" />
+              View testing details
+            </a>
+            <a className="button button-ghost" href="/sections/functional-testing">
+              <Icon name="gauge" />
+              View speed results
+            </a>
+          </div>
         </div>
         <div className="gallery-grid">
           {galleryImages.map((item) => (
@@ -798,7 +834,7 @@ function ShowcasePage() {
 
       <section className="section vision-section" id="vision">
         <div className="vision-copy">
-          <p className="eyebrow">Detection model evidence</p>
+          <p className="eyebrow">Detection model showcase</p>
           <h2>Object Detection Results</h2>
           <p>
             Training artifacts from the project compare YOLO model variants. The strongest recorded checkpoint
@@ -809,6 +845,12 @@ function ShowcasePage() {
             <span>YOLOv11n</span>
             <span>YOLOv8n 640×640</span>
             <span>YOLOv8n 240×120</span>
+          </div>
+          <div className="section-actions">
+            <a className="button button-ghost" href="/sections/object-detection">
+              <Icon name="target" />
+              View AI testing
+            </a>
           </div>
         </div>
         <div className="result-panels">
@@ -861,7 +903,23 @@ function ShowcasePage() {
 }
 
 function App() {
-  return window.location.pathname === '/view-360' ? <View360Page /> : <ShowcasePage />
+  const pathname = window.location.pathname
+
+  if (pathname === '/view-360') {
+    return <View360Page />
+  }
+
+  if (pathname === '/sections/evidence') {
+    return <EvidenceIndexPage logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
+  }
+
+  const detailSection = getSectionByPath(pathname)
+
+  if (detailSection) {
+    return <SectionDetailPage section={detailSection} logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
+  }
+
+  return <ShowcasePage />
 }
 
 export default App

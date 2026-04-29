@@ -52,10 +52,11 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 12% -10%, rgba(255, 106, 26, 0.3), transparent 31rem),
-    radial-gradient(circle at 88% 2%, rgba(101, 242, 255, 0.18), transparent 34rem),
-    radial-gradient(circle at 50% 52%, rgba(12, 66, 92, 0.44), transparent 42rem),
-    linear-gradient(180deg, #03060d 0%, #071424 42%, #04070d 100%);
+    radial-gradient(circle at 16% -8%, rgba(42, 138, 255, 0.34), transparent 31rem),
+    radial-gradient(circle at 88% 0%, rgba(101, 242, 255, 0.26), transparent 34rem),
+    radial-gradient(circle at 64% 38%, rgba(13, 88, 168, 0.36), transparent 34rem),
+    radial-gradient(circle at 14% 78%, rgba(1, 44, 96, 0.46), transparent 40rem),
+    linear-gradient(180deg, #020711 0%, #061a31 42%, #030814 100%);
 }
 
 body::before {
@@ -79,8 +80,8 @@ body::after {
   pointer-events: none;
   opacity: 0.36;
   background:
-    repeating-radial-gradient(ellipse at 50% 100%, rgba(101, 242, 255, 0.18) 0 1px, transparent 1px 22px),
-    linear-gradient(180deg, transparent, rgba(255, 106, 26, 0.1));
+    repeating-radial-gradient(ellipse at 50% 100%, rgba(101, 242, 255, 0.2) 0 1px, transparent 1px 22px),
+    linear-gradient(180deg, transparent, rgba(29, 126, 255, 0.12));
 }
 
 button,
