@@ -849,6 +849,7 @@
 }
 
 .gallery-card {
+  container-type: inline-size;
   margin: 0;
   padding: 12px;
   border-radius: 30px;
@@ -857,7 +858,8 @@
 
 .gallery-card img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: calc(100cqw * 4 / 3);
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   border-radius: 22px;
 }
