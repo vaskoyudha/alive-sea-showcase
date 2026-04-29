@@ -2680,6 +2680,12 @@ body.viewer-fullscreen-open {
     min-width: 82px;
   }
 
+  .topbar-is-menu-open .brand,
+  .topbar-is-menu-open .nav-cta,
+  .topbar-is-menu-open .nav-menu-toggle {
+    grid-row: 2;
+  }
+
   .nav-cta,
   .topbar-is-compact .nav-cta {
     justify-self: end;
@@ -2695,13 +2701,22 @@ body.viewer-fullscreen-open {
 
   .nav-links {
     grid-column: 1 / -1;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 5px;
+    grid-row: 1;
+    grid-template-columns: 1fr;
+    gap: 6px;
     width: 100%;
-    max-height: min(44svh, 300px);
+    max-height: min(58svh, 410px);
     padding: 7px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
     font-size: clamp(0.52rem, 2.05vw, 0.66rem);
     line-height: 1.1;
+    scroll-snap-type: y proximity;
+  }
+
+  .topbar-is-menu-open .nav-links {
+    display: grid;
   }
 
   .view360-route-nav .nav-links {
@@ -2778,9 +2793,27 @@ body.viewer-fullscreen-open {
   }
 
   .nav-links a {
-    min-height: 34px;
-    place-items: center;
-    padding: 0 4px;
+    grid-template-columns: 24px minmax(0, 1fr);
+    min-height: 42px;
+    justify-items: start;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    text-align: left;
+    scroll-snap-align: start;
+  }
+
+  .nav-links .app-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .nav-links span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .nav-links a::after {
