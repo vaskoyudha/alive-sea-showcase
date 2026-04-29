@@ -110,11 +110,15 @@ describe('ALIVE project showcase', () => {
     expect(screen.getByRole('heading', { name: /Validated in the Water/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /Object Detection Results/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /Aligned with SDG 3 and SDG 11/i })).toBeInTheDocument()
-    expect(screen.getByAltText(/Open ALIVE electronics bay/i)).toHaveAttribute(
+    expect(screen.getByAltText(/Students assembling ALIVE electronics/i)).toHaveAttribute(
       'src',
-      '/alive/drive-sections/documentation-testing/uji-coba-1/documentation-testing-014-20250909-163753.jpg',
+      '/alive/deep-dive/assembly.webp',
     )
-    expect(screen.getAllByText(/Internal electronics bay/i).length).toBeGreaterThan(0)
+    expect(screen.getByAltText(/Side render of the ALIVE smart lifeboat/i)).toHaveAttribute(
+      'src',
+      '/alive/render-side.webp',
+    )
+    expect(screen.queryByAltText(/Open ALIVE electronics bay/i)).not.toBeInTheDocument()
   })
 
   it('keeps a comfortable mobile layout for navigation and the 360 viewer', () => {
@@ -131,6 +135,7 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/scroll-padding-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
     expect(cssText).toMatch(/\.panorama-window\s*\{[\s\S]*min-height:\s*clamp\(240px,\s*68vw,\s*330px\)/)
     expect(cssText).toMatch(/\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)[\s\S]*scroll-margin-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
+    expect(cssText).toMatch(/\.evidence-wall-media-stack img:last-child\s*\{[\s\S]*aspect-ratio:\s*16\s*\/\s*9/)
   })
 
   it('keeps mobile navbar links behind a toggleable menu state', () => {

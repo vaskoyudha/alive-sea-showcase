@@ -71,9 +71,6 @@ const galleryImages = [
   },
 ]
 
-const electronicsBayImage =
-  '/alive/drive-sections/documentation-testing/uji-coba-1/documentation-testing-014-20250909-163753.jpg'
-
 const deepDiveAsset = (fileName: string) => asset(`deep-dive/${fileName}`)
 const evidenceAsset = (fileName: string) => (fileName.startsWith('/') ? fileName : deepDiveAsset(fileName))
 
@@ -110,6 +107,8 @@ const deepDiveEvidence = [
   {
     src: 'render-ortho.webp',
     alt: 'Orthographic render of the orange ALIVE lifeboat with catamaran pontoons',
+    secondarySrc: '/alive/render-side.webp',
+    secondaryAlt: 'Side render of the ALIVE smart lifeboat showing the rescue-orange pontoons and central deck layout',
     label: 'Design model',
     detail: 'The rendered model defines the rescue-orange body, camera mount, deck, and buoyant pontoon structure.',
   },
@@ -126,10 +125,10 @@ const deepDiveEvidence = [
     detail: 'The prototype was assembled and checked manually, including wiring, battery, receiver, and deck modules.',
   },
   {
-    src: electronicsBayImage,
-    alt: 'Open ALIVE electronics bay showing the Raspberry Pi case, battery connector, receiver, ESC wiring, and prototype control compartment',
-    label: 'Internal electronics bay',
-    detail: 'Open hull view showing the compute case, receiver, ESC wiring, and battery connector used during field preparation.',
+    src: 'isp-award-electronics.jpg',
+    alt: 'Close-up of ALIVE electronics compartment with Raspberry Pi, battery connector, ESC wiring, and ISP 2nd International Student Project Excellence Award 2026 card',
+    label: 'ISP award recognition',
+    detail: 'The project earned 2nd place at the International Student Project Excellence Award 2026, shown alongside the internal electronics bay.',
   },
   {
     src: 'water-deployment.webp',
@@ -594,8 +593,11 @@ function ProjectDeepDive() {
         </div>
         <div className="evidence-wall-grid">
           {deepDiveEvidence.map((item) => (
-            <figure className={item.src === electronicsBayImage ? 'evidence-wall-electronics' : undefined} key={item.src}>
-              <img src={evidenceAsset(item.src)} alt={item.alt} loading="lazy" />
+            <figure key={item.src}>
+              <div className={item.secondarySrc ? 'evidence-wall-media evidence-wall-media-stack' : 'evidence-wall-media'}>
+                <img src={evidenceAsset(item.src)} alt={item.alt} loading="lazy" />
+                {item.secondarySrc && <img src={evidenceAsset(item.secondarySrc)} alt={item.secondaryAlt} loading="lazy" />}
+              </div>
               <figcaption>
                 <strong>{item.label}</strong>
                 {item.detail}

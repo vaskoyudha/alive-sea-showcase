@@ -961,8 +961,10 @@
 }
 
 .team-section img {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: auto;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   border-radius: 26px;
 }
@@ -1189,6 +1191,15 @@
   background: rgba(255, 255, 255, 0.055);
 }
 
+.evidence-wall-media {
+  display: grid;
+  gap: 12px;
+}
+
+.evidence-wall-media-stack img:last-child {
+  aspect-ratio: 16 / 9;
+}
+
 .evidence-wall figure:first-child,
 .evidence-wall figure:nth-child(2) {
   grid-row: span 2;
@@ -1198,10 +1209,6 @@
   aspect-ratio: 4 / 3;
   max-height: 520px;
   object-position: center;
-}
-
-.evidence-wall-electronics img {
-  object-position: 78% 58%;
 }
 
 .evidence-wall figure:first-child img {
@@ -2248,7 +2255,7 @@ body.viewer-fullscreen-open {
     grid-row: 2;
     grid-column: 1 / -1;
     display: none;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 6px;
     width: 100%;
     max-height: min(42svh, 330px);
@@ -2267,16 +2274,19 @@ body.viewer-fullscreen-open {
 
   .nav-links a {
     display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
     min-height: 38px;
-    place-items: center;
-    padding: 0 6px;
+    align-items: center;
+    justify-items: start;
+    gap: 9px;
+    padding: 8px 12px;
     border: 1px solid rgba(191, 235, 245, 0.15);
-    border-radius: 999px;
+    border-radius: 16px;
     background:
       linear-gradient(180deg, rgba(201, 242, 251, 0.075), rgba(8, 24, 40, 0.08)),
       rgba(108, 165, 181, 0.055);
     opacity: 1;
-    text-align: center;
+    text-align: left;
   }
 
   .nav-links a::after {
@@ -2329,7 +2339,7 @@ body.viewer-fullscreen-open {
   }
 
   .detail-route-nav .nav-links {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .detail-route-nav .nav-links a {
@@ -2679,8 +2689,9 @@ body.viewer-fullscreen-open {
   }
 
   .view360-page-shell .topbar {
-    top: 10px;
-    bottom: auto;
+    top: auto;
+    bottom: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
     left: 10px;
     right: auto;
     width: calc(100vw - 20px);
@@ -2736,16 +2747,12 @@ body.viewer-fullscreen-open {
     display: grid;
   }
 
-  .view360-route-nav .nav-links {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .view360-page-shell .view360-route-nav:not(.topbar-is-menu-open) .nav-links {
     display: none;
   }
 
   .view360-cockpit .view360-copy {
-    top: 74px;
+    top: 22px;
     left: 10px;
     right: 10px;
     padding: 10px 11px 12px;
@@ -2807,6 +2814,17 @@ body.viewer-fullscreen-open {
 
   .view360-cockpit .scene-strip img {
     display: none;
+  }
+
+  .view360-cockpit .scene-caption {
+    position: fixed;
+    right: 10px;
+    bottom: calc(154px + env(safe-area-inset-bottom));
+    left: 10px;
+    display: grid;
+    width: auto;
+    padding: 8px 10px;
+    border-radius: 14px;
   }
 
   .nav-links a {
@@ -2889,7 +2907,7 @@ body.viewer-fullscreen-open {
   .hero-product {
     width: 122%;
     max-width: none;
-    transform: translateX(-8%) rotate(-3deg);
+    transform: translateX(-1%) rotate(-3deg);
   }
 
   .hero-orbit-large {
@@ -2981,6 +2999,16 @@ body.viewer-fullscreen-open {
   .deep-dive-hero,
   .deep-dive-panel {
     padding: 16px;
+  }
+
+  .deep-dive-copy > .eyebrow,
+  .team-section .eyebrow {
+    max-width: 100%;
+    padding: 5px 10px;
+    font-size: clamp(0.5rem, 1.9vw, 0.58rem);
+    letter-spacing: 0.1em;
+    line-height: 1.15;
+    white-space: nowrap;
   }
 
   .mission-brief img,
