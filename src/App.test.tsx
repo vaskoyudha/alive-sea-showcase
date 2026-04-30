@@ -137,6 +137,7 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.panorama-window\s*\{[\s\S]*min-height:\s*clamp\(240px,\s*68vw,\s*330px\)/)
     expect(cssText).toMatch(/\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)[\s\S]*scroll-margin-bottom:\s*calc\(172px \+ env\(safe-area-inset-bottom\)\)/)
     expect(cssText).toMatch(/\.evidence-wall-media-stack img:last-child\s*\{[\s\S]*aspect-ratio:\s*16\s*\/\s*9/)
+    expect(cssText).toMatch(/\.evidence-wall figure:nth-child\(5\) img\s*\{[\s\S]*object-position:\s*center 20%/)
   })
 
   it('keeps mobile navbar links behind a toggleable menu state', () => {
