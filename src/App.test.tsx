@@ -2,6 +2,7 @@ import { act } from 'react'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
+import appSource from './App.tsx?raw'
 import cssText from './App.css?raw'
 import { aliveMedia, aliveMediaTotals, aliveSections, getSectionByPath } from './data/aliveMedia'
 import vercelConfigText from '../vercel.json?raw'
@@ -195,6 +196,23 @@ describe('ALIVE project showcase', () => {
     expect(aliveSections.find((section) => section.id === 'documentation-testing')?.mediaCount).toBe(77)
   })
 
+  it('keeps public-facing media labels in English', () => {
+    const formerFieldTrialLabel = ['U', 'j', 'i', ' ', 'C', 'o', 'b', 'a'].join('')
+    const formerSpeedLabel = ['K', 'e', 'c', 'e', 'p', 'a', 't', 'a', 'n'].join('')
+    const indonesianTerms = new RegExp(`\\b(${formerFieldTrialLabel}|${formerSpeedLabel})\\b`, 'i')
+    const publicSectionCopy = aliveSections.flatMap((section) => [
+      section.eyebrow,
+      section.title,
+      section.summary,
+      section.proof,
+      section.interpretation,
+      section.ctaLabel,
+    ])
+    const publicMediaCopy = aliveMedia.flatMap((item) => [item.subsection, item.title, item.alt, item.caption])
+
+    expect([...publicSectionCopy, ...publicMediaCopy].filter((copy) => indonesianTerms.test(copy))).toEqual([])
+  })
+
   it('adds homepage buttons that route into the Drive section detail pages', () => {
     render(<App />)
 
@@ -242,24 +260,24 @@ describe('ALIVE project showcase', () => {
     }
   }, 15_000)
 
-  it('renders the documentation testing route with all five Uji Coba groups', () => {
+  it('renders the documentation testing route with all five Field Trial groups', () => {
     window.history.pushState({}, '', '/sections/documentation-testing')
 
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: 'Uji Coba 1' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Uji Coba 2' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Uji Coba 3' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Uji Coba 4' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Uji Coba 5' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Field Trial 1' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Field Trial 2' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Field Trial 3' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Field Trial 4' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Field Trial 5' })).toBeInTheDocument()
   })
 
-  it('renders object-detection videos with controls on the detail route', () => {
+  it('renders object-detection videos as Google Drive embeds on the detail route', () => {
     window.history.pushState({}, '', '/sections/object-detection')
 
     const { container } = render(<App />)
 
-    expect(container.querySelectorAll('video[controls]').length).toBe(2)
+    expect(container.querySelectorAll('iframe[src*="drive.google.com/file/d/"]').length).toBe(2)
     expect(screen.getByText(/runtime behavior/i)).toBeInTheDocument()
   })
 
@@ -275,7 +293,7 @@ describe('ALIVE project showcase', () => {
   })
 
   it('styles detail page media to show whole images without forced cropping', () => {
-    expect(cssText).toMatch(/\.section-media-frame img,\s*\.section-media-frame video\s*\{[\s\S]*object-fit:\s*contain/)
+    expect(cssText).toMatch(/\.section-media-frame img,\s*\.section-media-frame video,\s*\.section-media-frame iframe\s*\{[\s\S]*object-fit:\s*contain/)
     expect(cssText).toMatch(/\.section-media-frame\s*\{[\s\S]*aspect-ratio:\s*4\s*\/\s*3/)
     expect(cssText).toMatch(/\.section-media-card-video \.section-media-frame\s*\{[\s\S]*aspect-ratio:\s*16\s*\/\s*9/)
   })
@@ -302,6 +320,14 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.view360-copy\s*>\s*\.eyebrow\s*\{[\s\S]*white-space:\s*nowrap/)
     expect(cssText).toMatch(/\.view360-stats\s*\{[\s\S]*flex-wrap:\s*nowrap/)
     expect(cssText).toMatch(/\.view360-stats span\s*\{[\s\S]*white-space:\s*nowrap/)
+  })
+
+  it('loads the first Photo Sphere panorama through the scene sync path instead of constructor eager loading', () => {
+    expect(appSource).toMatch(/loadedPanoramaRef = useRef<string \| null>\(null\)/)
+    expect(appSource).toMatch(/loadedPanoramaRef\.current === activePanoramaSrc/)
+    expect(appSource).toMatch(/const requestedPanoramaSrc = activePanoramaSrc/)
+    expect(appSource).not.toMatch(/panorama:\s*initialBoatPanoramaSrc/)
+    expect(appSource).not.toMatch(/\.setPanorama\(activePanoramaSrc/)
   })
 
   it('lets visitors rotate the boat 360 camera and switch panorama scenes', () => {
@@ -399,6 +425,24 @@ describe('ALIVE project showcase', () => {
 
     expect(screen.queryByRole('button', { name: /enter fullscreen 360 viewer/i })).not.toBeInTheDocument()
     expect(requestFullscreen).not.toHaveBeenCalled()
+  })
+
+  it('opens clicked showcase images in a popup preview and closes it with Escape', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByAltText(/Top view render of ALIVE lifeboat design/i))
+
+    const dialog = screen.getByRole('dialog', { name: /Image preview/i })
+    expect(dialog).toBeInTheDocument()
+    expect(within(dialog).getByAltText(/Top view render of ALIVE lifeboat design/i)).toHaveAttribute(
+      'src',
+      '/alive/render-top.webp',
+    )
+    expect(within(dialog).getByText(/Top deck layout for buoyancy/i)).toBeInTheDocument()
+
+    fireEvent.keyDown(window, { key: 'Escape' })
+
+    expect(screen.queryByRole('dialog', { name: /Image preview/i })).not.toBeInTheDocument()
   })
 
   it('configures Vercel to serve client-side routes through the app shell', () => {

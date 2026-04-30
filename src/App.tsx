@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Viewer } from '@photo-sphere-viewer/core'
 import '@photo-sphere-viewer/core/index.css'
 import { EvidenceIndexPage } from './components/EvidenceIndexPage'
@@ -226,13 +226,108 @@ const initialBoatYaw = 209
 const initialBoatPitch = -14
 const initialBoatZoom = 55
 const initialBoatScene = panoramaScenes[0]
-const initialBoatPanoramaSrc = asset(initialBoatScene.src)
 const initialBoatCaption = `${initialBoatScene.label} · ${initialBoatScene.detail}`
 
 const wrapDegrees = (value: number) => ((value % 360) + 360) % 360
 
+type ImagePreview = {
+  src: string
+  alt: string
+  caption?: string
+}
+
 type View360Props = {
   variant?: 'section' | 'focus'
+}
+
+type ImagePreviewFrameProps = {
+  children: ReactNode
+}
+
+function getPreviewCaption(image: HTMLImageElement) {
+  const figure = image.closest('figure')
+  const caption = figure?.querySelector('figcaption')?.textContent?.replace(/\s+/g, ' ').trim()
+
+  return caption && caption !== image.alt ? caption : undefined
+}
+
+function shouldPreviewImage(image: HTMLImageElement) {
+  const hasReadableImage = Boolean(image.currentSrc || image.src) && image.alt.trim().length > 0
+  const isInteractiveControl = Boolean(image.closest('nav, .scene-strip, .photo-sphere-window'))
+
+  return hasReadableImage && !isInteractiveControl
+}
+
+function ImagePreviewFrame({ children }: ImagePreviewFrameProps) {
+  const [preview, setPreview] = useState<ImagePreview | null>(null)
+
+  useEffect(() => {
+    const openPreviewFromClick = (event: MouseEvent) => {
+      const image = event.target instanceof HTMLImageElement ? event.target : null
+
+      if (!image || !shouldPreviewImage(image)) {
+        return
+      }
+
+      setPreview({
+        src: image.getAttribute('src') ?? image.currentSrc ?? image.src,
+        alt: image.alt,
+        caption: getPreviewCaption(image),
+      })
+    }
+
+    document.addEventListener('click', openPreviewFromClick)
+
+    return () => {
+      document.removeEventListener('click', openPreviewFromClick)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!preview) {
+      return
+    }
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setPreview(null)
+      }
+    }
+
+    document.body.classList.add('image-preview-open')
+    window.addEventListener('keydown', closeOnEscape)
+
+    return () => {
+      document.body.classList.remove('image-preview-open')
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [preview])
+
+  return (
+    <>
+      {children}
+      {preview && (
+        <div className="image-preview-backdrop" onClick={() => setPreview(null)}>
+          <div
+            className="image-preview-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="image-preview-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="image-preview-topline">
+              <h2 id="image-preview-title">Image preview</h2>
+              <button type="button" onClick={() => setPreview(null)} aria-label="Close image preview">
+                Close
+              </button>
+            </div>
+            <img src={preview.src} alt={preview.alt} />
+            <p>{preview.caption ?? preview.alt}</p>
+          </div>
+        </div>
+      )}
+    </>
+  )
 }
 
 function View360({ variant = 'section' }: View360Props) {
@@ -242,6 +337,7 @@ function View360({ variant = 'section' }: View360Props) {
   const viewerShellRef = useRef<HTMLDivElement | null>(null)
   const photoSphereRef = useRef<HTMLDivElement | null>(null)
   const viewerRef = useRef<Viewer | null>(null)
+  const loadedPanoramaRef = useRef<string | null>(null)
   const bearingRef = useRef(initialBoatYaw)
   const activeScene = panoramaScenes[sceneIndex]
   const activePanoramaSrc = asset(activeScene.src)
@@ -256,9 +352,10 @@ function View360({ variant = 'section' }: View360Props) {
       return
     }
 
+    loadedPanoramaRef.current = null
+
     const viewer = new Viewer({
       container: photoSphereRef.current,
-      panorama: initialBoatPanoramaSrc,
       caption: initialBoatCaption,
       defaultYaw: `${initialBoatYaw}deg`,
       defaultPitch: `${initialBoatPitch}deg`,
@@ -279,12 +376,14 @@ function View360({ variant = 'section' }: View360Props) {
   useEffect(() => {
     const viewer = viewerRef.current
 
-    if (!viewer) {
+    if (!viewer || loadedPanoramaRef.current === activePanoramaSrc) {
       return
     }
 
+    const requestedPanoramaSrc = activePanoramaSrc
+
     void viewer
-      .setPanorama(activePanoramaSrc, {
+      .setPanorama(requestedPanoramaSrc, {
         caption: `${activeScene.label} · ${activeScene.detail}`,
         position: {
           yaw: `${bearingRef.current}deg`,
@@ -297,6 +396,11 @@ function View360({ variant = 'section' }: View360Props) {
           rotation: false,
         },
         showLoader: true,
+      })
+      .then((loaded) => {
+        if (loaded) {
+          loadedPanoramaRef.current = requestedPanoramaSrc
+        }
       })
       .catch((error: unknown) => {
         console.error('Failed to switch ALIVE boat 360 panorama', error)
@@ -920,22 +1024,22 @@ function ShowcasePage() {
 
 function App() {
   const pathname = window.location.pathname
+  let page: ReactNode
 
   if (pathname === '/view-360') {
-    return <View360Page />
+    page = <View360Page />
+  } else if (pathname === '/sections/evidence') {
+    page = <EvidenceIndexPage logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
+  } else {
+    const detailSection = getSectionByPath(pathname)
+    page = detailSection ? (
+      <SectionDetailPage section={detailSection} logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
+    ) : (
+      <ShowcasePage />
+    )
   }
 
-  if (pathname === '/sections/evidence') {
-    return <EvidenceIndexPage logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
-  }
-
-  const detailSection = getSectionByPath(pathname)
-
-  if (detailSection) {
-    return <SectionDetailPage section={detailSection} logoSrc={asset('logo.png')} sourceDriveUrl={driveUrl} />
-  }
-
-  return <ShowcasePage />
+  return <ImagePreviewFrame>{page}</ImagePreviewFrame>
 }
 
 export default App

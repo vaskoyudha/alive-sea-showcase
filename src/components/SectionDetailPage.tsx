@@ -32,10 +32,20 @@ function renderMedia(item: AliveMediaItem, index: number, section: AliveSection)
     <figure className={`section-media-card section-media-card-${item.type}`} key={item.id}>
       <div className="section-media-frame">
         {item.type === 'video' ? (
-          <video controls preload="metadata" aria-label={getMediaLabel(item, section, index)}>
-            <source src={item.src} type="video/mp4" />
-            <a href={item.src}>Open showcase media</a>
-          </video>
+          item.driveEmbedUrl ? (
+            <iframe
+              src={item.driveEmbedUrl}
+              title={getMediaLabel(item, section, index)}
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              loading="lazy"
+            />
+          ) : (
+            <video controls preload="metadata" aria-label={getMediaLabel(item, section, index)}>
+              <source src={item.src} type="video/mp4" />
+              <a href={item.src}>Open showcase media</a>
+            </video>
+          )
         ) : (
           <img src={item.src} alt={item.alt} loading="lazy" />
         )}
