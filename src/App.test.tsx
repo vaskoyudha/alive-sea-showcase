@@ -401,11 +401,11 @@ describe('ALIVE project showcase', () => {
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*width:\s*var\(--cockpit-scene-rail\)[\s\S]*grid-template-columns:\s*1fr/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-caption\s*\{[\s\S]*right:\s*calc\(var\(--cockpit-edge\) \+ var\(--cockpit-scene-rail\) \+ var\(--cockpit-scene-gap\)\)/)
     expect(cssText).toMatch(/\.view360-cockpit\s+\.scene-strip img\s*\{[\s\S]*max-height:\s*48px/)
-    expect(cssText).toMatch(/@media\s*\(max-width:\s*740px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)[\s\S]*overflow-x:\s*hidden/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*740px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*bottom:\s*calc\(242px \+ env\(safe-area-inset-bottom\)\)[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)[\s\S]*overflow-x:\s*hidden/)
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-page-shell\s+\.view360-route-nav:not\(\.topbar-is-menu-open\)\s+\.nav-links\s*\{[\s\S]*display:\s*none/)
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.view360-copy h1\s*\{[\s\S]*max-width:\s*none[\s\S]*font-size:\s*clamp\(1\.72rem,\s*8\.4vw,\s*2\.35rem\)/)
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.view360-copy \.eyebrow\s*\{[\s\S]*font-size:\s*clamp\(0\.56rem,\s*2\.15vw,\s*0\.66rem\)/)
-    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*10px[\s\S]*bottom:\s*calc\(166px \+ env\(safe-area-inset-bottom\)\)[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)/)
+    expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip\s*\{[\s\S]*left:\s*10px[\s\S]*bottom:\s*calc\(222px \+ env\(safe-area-inset-bottom\)\)[\s\S]*grid-template-columns:\s*repeat\(6,\s*minmax\(0,\s*1fr\)\)/)
     expect(cssText).toMatch(/@media\s*\(max-width:\s*520px\)[\s\S]*\.view360-cockpit\s+\.scene-strip span\s*\{[\s\S]*font-size:\s*clamp\(0\.48rem,\s*1\.75vw,\s*0\.56rem\)/)
   })
 
