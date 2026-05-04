@@ -113,6 +113,30 @@ const deepDiveEvidence = [
     detail: 'The rendered model defines the rescue-orange body, camera mount, deck, and buoyant pontoon structure.',
   },
   {
+    src: 'boat-size-length-90cm.jpeg',
+    alt: 'Side view of the ALIVE prototype with measuring tape and 90 centimeter length label',
+    label: 'Prototype length',
+    detail: 'The physical prototype is shown at 90 cm long, giving visitors a clear sense of the boat scale.',
+  },
+  {
+    src: 'boat-size-width-70cm.jpeg',
+    alt: 'Front view of the ALIVE prototype with measuring tape and 70 centimeter width label',
+    label: 'Prototype width',
+    detail: 'The front measurement shows the 70 cm catamaran span across the flotation arms.',
+  },
+  {
+    src: 'boat-size-height-20cm.jpeg',
+    alt: 'Close front view of the ALIVE prototype with vertical measuring tape and 20 centimeter height label',
+    label: 'Prototype height',
+    detail: 'The camera and deck profile are shown against a vertical measurement of 20 cm.',
+  },
+  {
+    src: 'boat-size-measure-closeup.jpeg',
+    alt: 'Close-up measuring tape view documenting the ALIVE prototype size',
+    label: 'Measurement detail',
+    detail: 'A close-up tape reference documents the real prototype dimensions rather than only rendered proportions.',
+  },
+  {
     src: 'field-testing.webp',
     alt: 'ALIVE prototype on a dock beside water during field testing with students',
     label: 'Field test setup',
