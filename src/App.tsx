@@ -921,7 +921,7 @@ function ShowcasePage() {
       <section className="design-board" aria-label="ALIVE design views" data-backdrop-text="DESIGN">
         <div className="board-header">
           <p className="eyebrow">Industrial design language</p>
-          <h2>Sea-ready shape, rescue-grade visibility.</h2>
+          <h2>Water-ready shape, rescue-grade visibility.</h2>
           <div className="section-actions">
             <a className="button button-ghost" href="/sections/design">
               <Icon name="layers" />
